@@ -1,7 +1,9 @@
 def decode_ways(code)
-  return 0 if code.empty?
+  return 0 unless code.positive?
 
+  code = code.to_s
   array = [code[0] == '0' ? 0 : 1]
+
   (1...code.length).each do |i|
     current_zero = code[i] == '0'
     straight_legal = code[i - 1] == '1' || (code[i - 1] == '2' && code[i] <= '6')
