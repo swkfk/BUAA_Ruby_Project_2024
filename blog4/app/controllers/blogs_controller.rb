@@ -25,6 +25,7 @@ class BlogsController < ApplicationController
     @blog = Blog.new(blog_params)
 
     respond_to do |format|
+      @blog.user_id = current_user.id
       if @blog.save
         format.html { redirect_to @blog, notice: "Blog was successfully created." }
         format.json { render :show, status: :created, location: @blog }
@@ -50,6 +51,14 @@ class BlogsController < ApplicationController
 
   # DELETE /blogs/1 or /blogs/1.json
   def destroy
+    if @blog.user_id != current_user.id
+      respond_to do |format|
+        format.html { redirect_to blogs_path, status: :see_other, notice: "You are not authorized to delete this blog." }
+        format.json { head :no_content }
+      end
+      return
+    end
+
     @blog.destroy!
 
     respond_to do |format|
@@ -66,6 +75,6 @@ class BlogsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def blog_params
-      params.require(:blog).permit(:title, :content)
+      params.require(:blog).permit(:title, :content, :user_id)
     end
 end
