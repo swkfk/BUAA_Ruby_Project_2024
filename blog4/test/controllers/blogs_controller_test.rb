@@ -1,7 +1,10 @@
 require "test_helper"
 
 class BlogsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in users(:one)
     @blog = blogs(:one)
   end
 
