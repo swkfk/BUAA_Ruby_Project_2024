@@ -6,15 +6,8 @@
 
 <div id="blogs">
   <% @blogs.each do |blog| %>
-    <div class="blog">
-      <%= link_to blog.title, blog %> <span style="color: gray">Posted <%= time_ago_in_words blog.created_at %> ago</span> |
-      <%= link_to "Edit", edit_blog_path(blog) %> |
-      <%= link_to "Destroy", blog, data: {
-        turbo_method: :delete,
-        turbo_confirm: "Are you sure to delete this blog?"
-      } %>
-      <pre style="background-color: #CCCCCC; padding: 10px; border-radius: 8px"><%= blog.content %></pre>
-    </div>
+    <%= render blog %>
+    You have <strong><%= blog.comments.length %></strong> <%= blog.comments.length > 1 ? "comments" : "comment" %>.
     <hr />
   <% end %>
 </div>
