@@ -2,14 +2,20 @@
 
 <% content_for :title, "Blogs" %>
 
-<h1>Blogs</h1>
+<h1>Listing Blogs</h1>
 
 <div id="blogs">
   <% @blogs.each do |blog| %>
-    <%= render blog %>
-    <p>
-      <%= link_to "Show this blog", blog %>
-    </p>
+    <div class="blog">
+      <%= link_to blog.title, blog %> <span style="color: gray">Posted <%= time_ago_in_words blog.created_at %> ago</span> |
+      <%= link_to "Edit", edit_blog_path(blog) %> |
+      <%= link_to "Destroy", blog, data: {
+        turbo_method: :delete,
+        turbo_confirm: "Are you sure to delete this blog?"
+      } %>
+      <pre style="background-color: #CCCCCC; padding: 10px; border-radius: 8px"><%= blog.content %></pre>
+    </div>
+    <hr />
   <% end %>
 </div>
 
