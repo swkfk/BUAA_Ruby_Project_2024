@@ -26,7 +26,7 @@
     <div id="left-panel">
       <div id="menu">
         <% if current_user %>
-          <p>Hi, <%= current_user.email %></p>
+          <p>Hi, <%= current_user.username %></p>
         <% end %>
         <ul>
           <li><%= link_to "Blogs", blogs_path %></li>
