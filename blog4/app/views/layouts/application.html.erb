@@ -18,6 +18,21 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div id="banner">
+      <h1>My Blog IV</h1>
+    </div>
+    <div id="left-panel">
+      <div id="menu">
+        <ul>
+          <li><%= link_to "Blogs", blogs_path %></li>
+        </ul>
+      </div>
+    </div>
+    <div id="main-panel">
+      <%= yield %>
+    </div>
+    <div id="footer">
+      Copyright <strong>swkfk</strong> &copy; 2024, For <strong>BUAA Ruby Course</strong>.
+    </div>
   </body>
 </html>

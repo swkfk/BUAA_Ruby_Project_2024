@@ -14,6 +14,10 @@
  *= require_self
  */
 
+html, body {
+    height: 90%;
+}
+
 .field_with_errors {
     padding: 2px;
     background-color: red;
@@ -41,4 +45,38 @@
 #error_explanation ul li {
     font-size: 16px;
     list-style: square;
+}
+
+#banner {
+    text-align: center;
+}
+
+:root {
+    --left-panel-width: 6%;
+}
+
+#left-panel {
+    float: left;
+    padding: 10px;
+
+}
+
+#main-panel {
+    float: left;
+    border-left: 1px solid;
+    padding: 10px;
+    height: 100%;
+    width: calc(95% - var(--left-panel-width));
+    overflow: scroll;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #DADADA;
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
