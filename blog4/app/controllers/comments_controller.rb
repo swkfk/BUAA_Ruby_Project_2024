@@ -24,6 +24,7 @@ class CommentsController < ApplicationController
     @blog = Blog.find(params[:blog_id])
     @comment = Comment.new(comment_params)
     @comment.blog = @blog
+    @comment.user = current_user
 
     respond_to do |format|
       if @comment.save
