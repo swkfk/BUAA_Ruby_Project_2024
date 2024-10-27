@@ -4,7 +4,7 @@
     <span style="font-weight: bold">by <%= blog.user.username %></span>
     <span style="color: gray">Posted <%= time_ago_in_words blog.created_at %> ago</span>
     |
-    <% if blog.user_id == current_user.id %>
+    <% if current_user && blog.user_id == current_user.id %>
       <%= link_to "Edit", edit_blog_path(blog) %> |
       <%= link_to "Destroy", blog, data: {
         turbo_method: :delete,

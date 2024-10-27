@@ -22,6 +22,10 @@
   </div>
 
   <div>
-    <%= form.submit %>
+    <% if current_user.nil? %>
+      <span style="color: gray">Submit</span>
+    <% else %>
+      <%= form.submit %>
+    <% end %>
   </div>
-<% end %>
+<%end%>
