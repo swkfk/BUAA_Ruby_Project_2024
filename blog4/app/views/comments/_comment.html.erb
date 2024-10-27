@@ -1,0 +1,13 @@
+<div id="<%= dom_id comment %>" style="border: dashed 1px gray; border-radius: 8px; background-color: #EFEFEF">
+  <p style="color: gray; margin-left: 8px">
+    <strong>Posted</strong>
+    <%= time_ago_in_words comment.created_at %>
+    <strong>ago</strong>
+  </p>
+
+  <pre>
+    <%= comment.content %>
+  </pre>
+
+</div>
+<br />

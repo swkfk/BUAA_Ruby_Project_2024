@@ -7,4 +7,17 @@
   <%= link_to "Back to blogs", blogs_path %>
 
   <%= button_to "Destroy this blog", @blog, method: :delete %>
+
+  <h2>Comments</h2>
+  <div id="comments">
+    <%= render @blog.comments.reverse %>
+  </div>
+
+  <%= form_with model: [@blog, Comment.new] do |f| %>
+    <p>
+      <%= f.label :content, "New Comment" %> <br />
+      <%= f.text_area :content, :rows => 5 %>
+    </p>
+    <p><%= f.submit "Add Comment" %></p>
+  <% end %>
 </div>
