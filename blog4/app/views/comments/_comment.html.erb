@@ -5,6 +5,15 @@
     <strong>ago</strong>
     |
     <span style="font-weight: bold">From <%= comment.user.username %></span>
+    |
+    <% if comment.user_id == current_user.id %>
+      <%= link_to "Destroy", blog_comment_url(params[:id], comment), data: {
+        turbo_method: :delete,
+        turbo_confirm: "Are you sure to delete this comment?"
+      } %>
+    <% else %>
+      <span style="color: gray">Destroy</span>
+    <% end %>
   </p>
 
   <pre>

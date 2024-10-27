@@ -52,10 +52,17 @@ class CommentsController < ApplicationController
 
   # DELETE /comments/1 or /comments/1.json
   def destroy
+    if @comment.user_id != current_user.id
+      respond_to do |format|
+        format.html { redirect_to blog_path(@comment.blog_id), status: :see_other, notice: "You are not authorized to delete this comment." }
+        format.json { head :no_content }
+      end
+      return
+    end
     @comment.destroy!
 
     respond_to do |format|
-      format.html { redirect_to blog_comments_path(@comment.blog_id), status: :see_other, notice: "Comment was successfully destroyed." }
+      format.html { redirect_to blog_path(@comment.blog_id), status: :see_other, notice: "Comment was successfully destroyed." }
       format.json { head :no_content }
     end
   end
