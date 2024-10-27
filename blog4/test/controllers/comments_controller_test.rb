@@ -1,7 +1,10 @@
 require "test_helper"
 
 class CommentsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
+    sign_in users(:one)
     @blog = blogs(:one)
     @comment = comments(:one)
     @comment.blog = @blog
@@ -45,6 +48,6 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
       delete blog_comment_url(@comment.blog_id, @comment)
     end
 
-    assert_redirected_to blog_comments_url
+    assert_redirected_to blog_url
   end
 end

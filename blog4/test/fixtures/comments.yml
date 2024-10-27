@@ -2,8 +2,10 @@
 
 one:
   blog: one
+  user: one
   content: MyText
 
 two:
   blog: two
+  user: one
   content: MyText
