@@ -38,6 +38,14 @@ class BlogsController < ApplicationController
 
   # PATCH/PUT /blogs/1 or /blogs/1.json
   def update
+    if @blog.user_id != current_user.id
+      respond_to do |format|
+        format.html { redirect_to blogs_path, status: :see_other, notice: "You are not authorized to edit this blog." }
+        format.json { head :no_content }
+      end
+      return
+    end
+
     respond_to do |format|
       if @blog.update(blog_params)
         format.html { redirect_to @blog, notice: "Blog was successfully updated." }
