@@ -2,11 +2,11 @@
 
 <h1>Editing comment</h1>
 
-<%= render "form", comment: @comment %>
+<%= render "form", url: blog_comment_path(@comment.blog_id, @comment), comment: @comment %>
 
 <br>
 
 <div>
-  <%= link_to "Show this comment", @comment %> |
-  <%= link_to "Back to comments", comments_path %>
+  <%= link_to "Show this comment", blog_comment_path(@comment.blog_id, @comment) %> |
+  <%= link_to "Back to comments", blog_comments_path(@comment.blog_id) %>
 </div>

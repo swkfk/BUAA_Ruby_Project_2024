@@ -2,47 +2,49 @@ require "test_helper"
 
 class CommentsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    @blog = blogs(:one)
     @comment = comments(:one)
+    @comment.blog = @blog
   end
 
   test "should get index" do
-    get comments_url
+    get blog_comments_url @blog.id
     assert_response :success
   end
 
   test "should get new" do
-    get new_comment_url
+    get new_blog_comment_url(@blog.id)
     assert_response :success
   end
 
   test "should create comment" do
     assert_difference("Comment.count") do
-      post comments_url, params: { comment: { blog_id: @comment.blog_id, content: @comment.content } }
+      post blog_comments_url(@blog.id), params: { comment: { blog_id: @comment.blog_id, content: @comment.content } }
     end
 
-    assert_redirected_to comment_url(Comment.last)
+    assert_redirected_to blog_url(@blog.id)
   end
 
   test "should show comment" do
-    get comment_url(@comment)
+    get blog_comment_url(@blog, @comment)
     assert_response :success
   end
 
   test "should get edit" do
-    get edit_comment_url(@comment)
+    get edit_blog_comment_url(@blog, @comment)
     assert_response :success
   end
 
   test "should update comment" do
-    patch comment_url(@comment), params: { comment: { blog_id: @comment.blog_id, content: @comment.content } }
-    assert_redirected_to comment_url(@comment)
+    patch blog_comment_url(@blog, @comment), params: { comment: { blog_id: @comment.blog_id, content: @comment.content } }
+    assert_redirected_to blog_comment_url(@comment.blog_id, @comment)
   end
 
   test "should destroy comment" do
     assert_difference("Comment.count", -1) do
-      delete comment_url(@comment)
+      delete blog_comment_url(@comment.blog_id, @comment)
     end
 
-    assert_redirected_to comments_url
+    assert_redirected_to blog_comments_url
   end
 end
