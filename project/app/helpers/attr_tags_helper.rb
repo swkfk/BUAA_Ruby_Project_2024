@@ -1,0 +1,2 @@
+module AttrTagsHelper
+end

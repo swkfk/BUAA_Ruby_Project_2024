@@ -1,0 +1,2 @@
+class AttrTag < ApplicationRecord
+end

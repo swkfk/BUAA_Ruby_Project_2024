@@ -1,0 +1,2 @@
+module AttrColorsHelper
+end

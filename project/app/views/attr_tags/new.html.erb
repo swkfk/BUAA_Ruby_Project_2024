@@ -1,0 +1,11 @@
+<% content_for :title, "New attr tag" %>
+
+<h1>New attr tag</h1>
+
+<%= render "form", attr_tag: @attr_tag %>
+
+<br>
+
+<div>
+  <%= link_to "Back to attr tags", attr_tags_path %>
+</div>

@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @attr_tag %>
+
+<div>
+  <%= link_to "Edit this attr tag", edit_attr_tag_path(@attr_tag) %> |
+  <%= link_to "Back to attr tags", attr_tags_path %>
+
+  <%= button_to "Destroy this attr tag", @attr_tag, method: :delete %>
+</div>

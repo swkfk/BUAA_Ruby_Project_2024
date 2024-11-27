@@ -1,0 +1,12 @@
+<% content_for :title, "Editing attr color" %>
+
+<h1>Editing attr color</h1>
+
+<%= render "form", attr_color: @attr_color %>
+
+<br>
+
+<div>
+  <%= link_to "Show this attr color", @attr_color %> |
+  <%= link_to "Back to attr colors", attr_colors_path %>
+</div>

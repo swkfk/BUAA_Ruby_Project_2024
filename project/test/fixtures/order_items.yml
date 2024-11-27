@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  good: one
+  count: 1
+  order: one
+
+two:
+  good: two
+  count: 1
+  order: two
