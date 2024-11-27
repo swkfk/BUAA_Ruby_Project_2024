@@ -1,6 +1,70 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
 
+  def admin
+
+  end
+
+  def login
+  end
+
+  def do_login
+    username = params[:username]
+    raw_password = params[:password]
+    role = params[:user_type]
+    user = User.where(name: username, password: helpers.hash_password(username, raw_password)).first
+    if user and not user.user_roles.find_by(name: role).nil?
+      session[:current_userid] = user.id
+      session[:current_role] = role
+      if role == "Admin"
+        redirect_to admin_url
+      else
+        redirect_to goods_url
+      end
+    else
+      redirect_to login_users_path, alert: "Invalid user name or password or wrong role."
+    end
+  end
+
+  def register
+  end
+
+  def do_register
+    username = params[:username]
+    raw_password = params[:password]
+    re_password = params[:re_password]
+
+    if raw_password != re_password
+      redirect_to register_users_path, alert: "Password and re-password are not the same."
+      return
+    end
+
+    unless User.find_by(name: username).nil?
+      redirect_to register_users_path, alert: "User name already exists."
+      return
+    end
+
+    email = params[:email]
+    role = params[:user_type]
+
+    if role == "Admin" or UserRole.find_by(name: role).nil?
+      puts ">>>>>> Role #{role} does not exist or not permitted."
+      redirect_to register_users_path, alert: "Role #{role} does not exist or not permitted."
+      return
+    end
+
+    puts ">>>>>> Registering user #{username} with role #{role} and email #{email}."
+
+    user = User.create(name: username, password: helpers.hash_password(username, raw_password), email: email)
+    user.user_roles << UserRole.find_by(name: role)
+
+    puts ">>>>>> User #{user.name} created with id #{user.id}."
+    user.save!
+    puts ">>>>>> User #{user.name} saved."
+
+    redirect_to login_users_path, notice: "User #{username} registered successfully."
+  end
+
   # GET /users or /users.json
   def index
     @users = User.all

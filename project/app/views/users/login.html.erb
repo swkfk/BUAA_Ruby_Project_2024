@@ -1,0 +1,19 @@
+<h1>登录到 Ruby Mailer！</h1>
+<div style="color: red"><%= alert %></div>
+<div style="color: green"><%= notice %></div>
+
+<%= form_with url: do_login_users_path do %>
+  <p>
+    用户名：<%= text_field_tag :username %>
+  </p>
+
+  <p>
+    密码：<%= password_field_tag :password %>
+  </p>
+
+  <p>
+    用户类型：<%= select_tag :user_type, options_for_select([%w[用户 Customer], %w[商户 Merchant], %w[管理员 Admin]]) %>
+  </p>
+
+  <%= submit_tag '登录' %>
+<% end %>
