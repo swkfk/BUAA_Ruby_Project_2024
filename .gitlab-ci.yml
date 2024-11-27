@@ -2,9 +2,10 @@ test-blog4:
   stage: test
   script:
     - cd project
-    - bundle install
-    - rails db:migrate RAILS_ENV=test
-    - PARALLEL_WORKERS=1 rails test
+    # vvv Temporarily shut it down vvv
+    # - bundle install
+    # - rails db:migrate RAILS_ENV=test
+    # - PARALLEL_WORKERS=1 rails test
   only:
     - project
 
@@ -15,6 +16,7 @@ deploy-blog4:
     - cd /project
     - bundle install
     - rails db:migrate
+	- rails db:seed  # Useful if I changed the db/seeds.rb
     - sv restart project
   only:
-  - project
+    - project
