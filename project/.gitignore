@@ -36,3 +36,5 @@
 
 # To avoid the problem caused by the 'brakeman (6.2.2) can no longer befound in that source'
 Gemfile.lock
+
+/.idea
