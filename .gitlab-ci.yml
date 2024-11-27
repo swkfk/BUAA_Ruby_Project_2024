@@ -16,7 +16,7 @@ deploy-blog4:
     - cd /project
     - bundle install
     - rails db:migrate
-	- rails db:seed  # Useful if I changed the db/seeds.rb
+    - rails db:seed  # Useful if I changed the db/seeds.rb
     - sv restart project
   only:
     - project
