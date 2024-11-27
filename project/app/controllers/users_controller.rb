@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
 
   def admin
-
+    authenticate_user "Admin"
   end
 
   def login
@@ -24,6 +24,12 @@ class UsersController < ApplicationController
     else
       redirect_to login_users_path, alert: "Invalid user name or password or wrong role."
     end
+  end
+
+  def logout
+    session.delete(:current_userid)
+    session.delete(:current_role)
+    redirect_to login_users_path, notice: "Logged out successfully"
   end
 
   def register

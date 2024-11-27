@@ -4,6 +4,13 @@
 
 <h1>Goods</h1>
 
+<% if @current_user.nil? %>
+  <%= link_to "登录", login_users_path %>
+  <%= link_to "注册", register_users_path %>
+<% else %>
+  <p>欢迎回来，<b><%= @current_user.name %></b>！<%= link_to "退出登录", logout_users_path %></p>
+<% end %>
+
 <div id="goods">
   <% @goods.each do |good| %>
     <%= render good %>

@@ -3,6 +3,7 @@ class GoodsController < ApplicationController
 
   # GET /goods or /goods.json
   def index
+    authenticate_user
     @goods = Good.all
   end
 
