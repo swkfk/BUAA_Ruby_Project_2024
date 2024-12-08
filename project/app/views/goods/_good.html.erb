@@ -11,12 +11,36 @@
 
   <p>
     <strong>Price:</strong>
-    <%= good.price %>
+    <%= number_with_precision(good.price, precision: 2) %>
   </p>
 
   <p>
-    <strong>Image:</strong>
-    <%= good.image %>
+    <strong>Tags:</strong>
+    <% GoodTagRelation.where(good_id: good.id).map { |relation| AttrTag.where(id: relation.attr_tag_id).first }.each do |tag| %>
+      <span class="tag-badge"><%= tag.name %></span>
+    <% end %>
   </p>
 
+  <p>
+    <strong>Colors:</strong>
+    <% GoodColorRelation.where(good_id: good.id).map { |relation| AttrColor.where(id: relation.attr_color_id).first }.each do |color| %>
+      <span class="color-item">
+        <%= color.name %>
+        <span class="color-circle" style="background-color: <%= color.rgb %>;"></span>
+      </span>
+    <% end %>
+  </p>
 </div>
+
+<style>
+  .color-circle {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-left: 10px;
+    margin-bottom: 4px;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+  }
+</style>

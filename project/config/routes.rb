@@ -4,7 +4,12 @@ Rails.application.routes.draw do
   resources :comments
   resources :favorite_items
   resources :cart_items
-  resources :goods
+  resources :goods do
+    collection do
+      get "edit_good_attribute"
+      post "do_edit_good_attribute"
+    end
+  end
   resources :attr_colors
   resources :attr_tags
 

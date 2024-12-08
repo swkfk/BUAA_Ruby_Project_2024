@@ -4,7 +4,8 @@
 
 <div>
   <%= link_to "Edit this good", edit_good_path(@good) %> |
-  <%= link_to "Back to goods", goods_path %>
+  <%= link_to "Back to goods", goods_path %> |
+  <%= link_to "Edit Attribute", edit_good_attribute_goods_path(:id => @good.id)  %>
 
   <%= button_to "Destroy this good", @good, method: :delete %>
 </div>

@@ -27,26 +27,6 @@
   </div>
 
   <div>
-    <%= form.label :attr_tags, "标签", style: "display: block" %>
-    <%= form.collection_check_boxes :attr_tag_ids, AttrTag.all, :id, :name do |b| %>
-      <div style="display: inline-block; margin-right: 10px;">
-        <%= b.check_box %>
-        <%= b.label %>
-      </div>
-    <% end %>
-  </div>
-
-  <div>
-    <%= form.label :color_tags, "颜色", style: "display: block" %>
-    <%= form.collection_check_boxes :attr_tag_ids, AttrColor.all, :id, :name do |b| %>
-      <div style="display: inline-block; margin-right: 10px;">
-        <%= b.check_box %>
-        <%= b.label %>
-      </div>
-    <% end %>
-  </div>
-
-  <div>
     <%= form.submit "保存商品" %>
   </div>
 <% end %>

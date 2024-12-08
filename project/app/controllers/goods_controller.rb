@@ -54,6 +54,32 @@ class GoodsController < ApplicationController
     end
   end
 
+  def edit_good_attribute
+    authenticate_user "Admin", "Merchant"
+    @good = Good.find(params[:id])
+    if @good.nil?
+      redirect_to goods_path
+      return
+    end
+    @tags = AttrTag.all
+    @checked_tags = GoodTagRelation.where(good_id: @good.id).map { |relation| relation.attr_tag_id }
+    @colors = AttrColor.all
+    @checked_colors = GoodColorRelation.where(good_id: @good.id).map { |relation| relation.attr_color_id }
+  end
+
+  def do_edit_good_attribute
+    @good = Good.find(params[:id])
+    GoodTagRelation.destroy_by(good_id: @good.id)
+    GoodColorRelation.destroy_by(good_id: @good.id)
+    params[:attr_tag_ids].each do |tag_id|
+      GoodTagRelation.create(good_id: @good.id, attr_tag_id: tag_id).save
+    end
+    params[:attr_color_ids].each do |color_id|
+      GoodColorRelation.create(good_id: @good.id, attr_color_id: color_id).save
+    end
+    redirect_to good_path(@good)
+  end
+
   # DELETE /goods/1 or /goods/1.json
   def destroy
     @good.destroy!
@@ -72,6 +98,6 @@ class GoodsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def good_params
-      params.require(:good).permit(:name, :price, :description, attr_tag_ids: [])
+      params.require(:good).permit(:name, :price, :description)
     end
 end
