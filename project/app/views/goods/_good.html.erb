@@ -31,7 +31,7 @@
     <% end %>
   </p>
 
-  <% if session[:current_userid] %>
+  <% if session[:current_userid] && session[:current_role] == "Customer" %>
     <% cart_item = CartItem.where(user_id: session[:current_userid], good_id: good.id).first %>
     <% if cart_item.nil? %>
       <%= form_with(model: CartItem) do |form| %>

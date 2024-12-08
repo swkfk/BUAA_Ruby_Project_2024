@@ -18,9 +18,11 @@
 <div id="goods">
   <% @goods.each do |good| %>
     <%= render good %>
-    <p>
-      <%= link_to "Show this good", good %>
-    </p>
+    <% if session[:current_userid] && session[:current_role] != "Customer"  %>
+      <p>
+        <%= link_to "Show this good", good %>
+      </p>
+    <% end %>
   <% end %>
 </div>
 
