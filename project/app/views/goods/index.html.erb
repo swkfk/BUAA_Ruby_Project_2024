@@ -11,6 +11,10 @@
   <p>欢迎回来，<b><%= @current_user.name %></b>！<%= link_to "退出登录", logout_users_path %></p>
 <% end %>
 
+<% if session[:current_role] == "Customer" %>
+  <%= link_to "View Carts", cart_items_path %>
+<% end %>
+
 <div id="goods">
   <% @goods.each do |good| %>
     <%= render good %>

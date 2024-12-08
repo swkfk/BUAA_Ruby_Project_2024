@@ -6,11 +6,10 @@
 
 <div id="cart_items">
   <% @cart_items.each do |cart_item| %>
-    <%= render cart_item %>
-    <p>
-      <%= link_to "Show this cart item", cart_item %>
-    </p>
+    <% unless CartItem.where(user_id: session[:current_userid]).empty? %>
+        <%= render cart_item %>
+    <% end %>
   <% end %>
 </div>
 
-<%= link_to "New cart item", new_cart_item_path %>
+<%= link_to "Back to Goods", goods_path %>

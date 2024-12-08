@@ -25,7 +25,7 @@ class CartItemsController < ApplicationController
 
     respond_to do |format|
       if @cart_item.save
-        format.html { redirect_to @cart_item, notice: "Cart item was successfully created." }
+        format.html { redirect_to goods_path, notice: "Cart item was successfully created." }
         format.json { render :show, status: :created, location: @cart_item }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -36,9 +36,19 @@ class CartItemsController < ApplicationController
 
   # PATCH/PUT /cart_items/1 or /cart_items/1.json
   def update
+    authenticate_user "Customer"
+    unless @cart_item.user_id == session[:current_userid]
+      redirect_to goods_path, notice: "You can only update your own cart items."
+      return
+    end
+    if cart_item_params[:count].to_i < 1
+      @cart_item.destroy!
+      redirect_to goods_path, notice: "Cart item was successfully destroyed."
+      return
+    end
     respond_to do |format|
       if @cart_item.update(cart_item_params)
-        format.html { redirect_to @cart_item, notice: "Cart item was successfully updated." }
+        format.html { redirect_to goods_path, notice: "Cart item was successfully updated." }
         format.json { render :show, status: :ok, location: @cart_item }
       else
         format.html { render :edit, status: :unprocessable_entity }

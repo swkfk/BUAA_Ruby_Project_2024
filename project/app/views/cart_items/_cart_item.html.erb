@@ -1,12 +1,7 @@
 <div id="<%= dom_id cart_item %>">
   <p>
-    <strong>User:</strong>
-    <%= cart_item.user_id %>
-  </p>
-
-  <p>
     <strong>Good:</strong>
-    <%= cart_item.good_id %>
+    <%= Good.where(id: cart_item.good_id).first.name %>
   </p>
 
   <p>

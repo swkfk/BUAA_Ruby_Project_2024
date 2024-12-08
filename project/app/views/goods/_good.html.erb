@@ -30,6 +30,26 @@
       </span>
     <% end %>
   </p>
+
+  <% if session[:current_userid] %>
+    <% cart_item = CartItem.where(user_id: session[:current_userid], good_id: good.id).first %>
+    <% if cart_item.nil? %>
+      <%= form_with(model: CartItem) do |form| %>
+        <%= form.number_field :good_id, value: good.id, hidden: true %>
+        <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
+        <%= form.number_field :count, in: 1..999, value: 1 %>
+        <%= form.submit "Add to cart" %>
+      <% end %>
+    <% else %>
+      Have added to cart, count: <%= cart_item.count %>
+      <%= form_with model: CartItem, url: "/cart_items/#{cart_item.id}", method: "put" do |form| %>
+        <%= form.number_field :good_id, value: good.id, hidden: true %>
+        <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
+        <%= form.number_field :count, in: 0..999, value: cart_item.count %>
+        <%= form.submit "Change the count" %>
+      <% end %>
+    <% end %>
+  <% end %>
 </div>
 
 <style>
