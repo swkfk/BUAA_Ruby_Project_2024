@@ -1,3 +1,18 @@
 <h1>Ruby Mailer 管理后台</h1>
 
 <p>欢迎回来，<b><%= @current_user.name %></b>！<%= link_to "退出登录", logout_users_path %></p>
+
+<div>
+  <div>
+    <h2>标签管理</h2>
+    <%= link_to "添加新标签", new_attr_tag_path %>
+    <%= link_to "查看所有标签", attr_tags_path %>
+  </div>
+
+  <div>
+    <h2>颜色管理</h2>
+    <%= link_to "添加新颜色", new_attr_color_path %>
+    <%= link_to "查看所有颜色", attr_colors_path %>
+  </div>
+</div>
+

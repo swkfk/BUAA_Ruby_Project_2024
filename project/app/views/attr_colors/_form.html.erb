@@ -13,7 +13,15 @@
 
   <div>
     <%= form.label :rgb, style: "display: block" %>
-    <%= form.text_field :rgb %>
+    <%= form.color_field :rgb,
+        id: "rgb_field",
+        onchange: "document.getElementById('rgb_hex').value = this.value",
+        style: "width: 100px; height: 50px;" %>
+    <%= form.text_field :rgb, 
+        id: "rgb_hex",
+        value: "#000000",
+        readonly: true,
+        style: "margin-left: 10px;" %>
   </div>
 
   <div>

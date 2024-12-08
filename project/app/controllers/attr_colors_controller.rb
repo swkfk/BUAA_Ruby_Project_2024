@@ -25,7 +25,7 @@ class AttrColorsController < ApplicationController
 
     respond_to do |format|
       if @attr_color.save
-        format.html { redirect_to @attr_color, notice: "Attr color was successfully created." }
+        format.html { redirect_to attr_colors_path, notice: "Attr color was successfully created." }
         format.json { render :show, status: :created, location: @attr_color }
       else
         format.html { render :new, status: :unprocessable_entity }

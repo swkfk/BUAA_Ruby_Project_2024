@@ -19,13 +19,13 @@ class AttrTagsController < ApplicationController
   def edit
   end
 
-  # POST /attr_tags or /attr_tags.json
   def create
+    authenticate_user "Admin"
     @attr_tag = AttrTag.new(attr_tag_params)
 
     respond_to do |format|
       if @attr_tag.save
-        format.html { redirect_to @attr_tag, notice: "Attr tag was successfully created." }
+        format.html { redirect_to attr_tags_path, notice: "Attr tag was successfully created." }
         format.json { render :show, status: :created, location: @attr_tag }
       else
         format.html { render :new, status: :unprocessable_entity }
