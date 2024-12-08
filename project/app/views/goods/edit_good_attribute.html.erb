@@ -5,7 +5,7 @@
     <h3>Good Name: <%= @good.name %></h3>
   </div>
 
-  <%= form_with url: do_edit_good_attribute_goods_path(:id => 1) do |form| %>
+  <%= form_with url: do_edit_good_attribute_goods_path(:id => params[:id]) do |form| %>
 
   <div>
     Good Tags:
