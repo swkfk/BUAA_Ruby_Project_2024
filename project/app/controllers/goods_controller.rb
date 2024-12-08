@@ -13,6 +13,12 @@ class GoodsController < ApplicationController
 
   # GET /goods/new
   def new
+    unless session[:current_role] == "Merchant" || session[:current_role] == "Admin"
+      flash[:notice] = "Only merchants and admins can create goods"
+      redirect_to goods_path
+      return
+    end
+
     @good = Good.new
   end
 

@@ -20,4 +20,6 @@
   <% end %>
 </div>
 
-<%= link_to "New good", new_good_path %>
+<% if session[:current_role] == "Merchant" || session[:current_role] == "Admin" %>
+  <%= link_to "New good", new_good_path %>
+<% end %>
