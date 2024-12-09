@@ -31,6 +31,29 @@
     <% end %>
   </p>
 
+  <p>
+    <strong>Comments:</strong>
+    <% Comment.where(good_id: good.id).each do |comment| %>
+      <% if comment.user.id == session[:current_userid] %>
+        <%= form_with model: Comment, url: "/comments/#{comment.id}", method: "put" do |form| %>
+          <%= form.text_area :content, value: comment.content %>
+          <%= form.number_field :score, in: 1..5, value: comment.score %>
+          <%= form.submit "Update" %>
+        <% end %>
+        <%= form_with model: Comment, url: "/comments/#{comment.id}", method: "delete" do |form| %>
+          <%= form.submit "Delete" %>
+        <% end %>
+      <% else %>
+        <p>
+          <%= comment.user.name %>:
+          <strong><%= comment.content %></strong>
+          Score: <%= comment.score %>
+          <%= comment.updated_at %>
+        </p>
+      <% end %>
+    <% end %>
+  </p>
+
   <% if session[:current_userid] && session[:current_role] == "Customer" %>
     <% cart_item = CartItem.where(user_id: session[:current_userid], good_id: good.id).first %>
     <% if cart_item.nil? %>
@@ -49,18 +72,29 @@
         <%= form.submit "Change the count" %>
       <% end %>
     <% end %>
+    <%= form_with model: Comment do |form| %>
+      <%= form.number_field :good_id, value: good.id, hidden: true %>
+      <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
+      <p>
+        Comments: <%= form.text_area :content %>
+      </p>
+      <p>
+        Your Score: <%= form.number_field :score, in: 1..5, value: 5 %>
+      </p>
+      <%= form.submit "Add comment" %>
+    <% end %>
   <% end %>
 </div>
 
 <style>
-  .color-circle {
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    margin-left: 10px;
-    margin-bottom: 4px;
-    vertical-align: middle;
-    border: 1px solid #ddd;
-  }
+    .color-circle {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-left: 10px;
+        margin-bottom: 4px;
+        vertical-align: middle;
+        border: 1px solid #ddd;
+    }
 </style>

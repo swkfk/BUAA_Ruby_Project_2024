@@ -21,11 +21,16 @@ class CommentsController < ApplicationController
 
   # POST /comments or /comments.json
   def create
+    authenticate_user "Customer"
+    unless comment_params[:user_id] == session[:current_userid].to_s
+      redirect_to goods_path, notice: "You can't create a comment for another user"
+      return
+    end
     @comment = Comment.new(comment_params)
 
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to @comment, notice: "Comment was successfully created." }
+        format.html { redirect_to goods_path, notice: "Comment was successfully created." }
         format.json { render :show, status: :created, location: @comment }
       else
         format.html { render :new, status: :unprocessable_entity }
