@@ -1,12 +1,50 @@
 <div id="<%= dom_id favorite_item %>">
   <p>
-    <strong>User:</strong>
-    <%= favorite_item.user_id %>
+    <strong>Good:</strong>
+    <%= favorite_item.good.name %>
   </p>
 
   <p>
-    <strong>Good:</strong>
-    <%= favorite_item.good_id %>
+    <strong>Description:</strong>
+    <%= favorite_item.good.description %>
   </p>
 
+  <p>
+    <strong>Price:</strong>
+    <%= number_with_precision(favorite_item.good.price, precision: 2) %>
+  </p>
+
+  <p>
+    <strong>Tags:</strong>
+    <% GoodTagRelation.where(good_id: favorite_item.good_id).map { |relation| AttrTag.where(id: relation.attr_tag_id).first }.each do |tag| %>
+      <span class="tag-badge"><%= tag.name %></span>
+    <% end %>
+  </p>
+
+  <p>
+    <strong>Colors:</strong>
+    <% GoodColorRelation.where(good_id: favorite_item.good_id).map { |relation| AttrColor.where(id: relation.attr_color_id).first }.each do |color| %>
+      <span class="color-item">
+        <%= color.name %>
+        <span class="color-circle" style="background-color: <%= color.rgb %>;"></span>
+      </span>
+    <% end %>
+  </p>
+
+  <hr />
+
 </div>
+
+<style>
+.color-circle {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-left: 10px;
+  margin-bottom: 4px;
+  vertical-align: middle;
+  border: 1px solid #ddd;
+}
+</style>
+

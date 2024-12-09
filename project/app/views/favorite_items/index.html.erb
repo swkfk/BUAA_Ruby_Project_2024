@@ -7,10 +7,7 @@
 <div id="favorite_items">
   <% @favorite_items.each do |favorite_item| %>
     <%= render favorite_item %>
-    <p>
-      <%= link_to "Show this favorite item", favorite_item %>
-    </p>
   <% end %>
 </div>
 
-<%= link_to "New favorite item", new_favorite_item_path %>
+<%= link_to "Go Back", goods_path %>  

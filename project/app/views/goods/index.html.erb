@@ -13,6 +13,7 @@
 
 <% if session[:current_role] == "Customer" %>
   <%= link_to "View Carts", cart_items_path %>
+  <%= link_to "View Favorites", favorite_items_path %>
 <% end %>
 
 <div id="goods">

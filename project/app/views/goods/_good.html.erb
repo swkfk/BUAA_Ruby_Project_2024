@@ -55,6 +55,21 @@
   </p>
 
   <% if session[:current_userid] && session[:current_role] == "Customer" %>
+    <% favorite_item = FavoriteItem.where(user_id: session[:current_userid], good_id: good.id).first %>
+    <% if favorite_item.nil? %>
+      <%= form_with model: FavoriteItem do |form| %>
+        <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
+        <%= form.number_field :good_id, value: good.id, hidden: true %>
+        <%= form.submit "Add to Favorite!" %>
+      <% end %>
+    <% else %>
+      <%= form_with model: FavoriteItem, url: "/favorite_items/#{favorite_item.id}", method: "delete" do |form| %>
+        <%= form.submit "Remove from Favorite!" %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if session[:current_userid] && session[:current_role] == "Customer" %>
     <% cart_item = CartItem.where(user_id: session[:current_userid], good_id: good.id).first %>
     <% if cart_item.nil? %>
       <%= form_with(model: CartItem) do |form| %>
