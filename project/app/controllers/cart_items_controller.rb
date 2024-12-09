@@ -3,6 +3,7 @@ class CartItemsController < ApplicationController
 
   # GET /cart_items or /cart_items.json
   def index
+    authenticate_user "Customer"
     @cart_items = CartItem.all
   end
 

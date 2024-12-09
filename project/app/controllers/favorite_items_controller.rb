@@ -3,6 +3,7 @@ class FavoriteItemsController < ApplicationController
 
   # GET /favorite_items or /favorite_items.json
   def index
+    authenticate_user "Customer"
     @favorite_items = FavoriteItem.all
   end
 

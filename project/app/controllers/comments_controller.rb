@@ -3,6 +3,7 @@ class CommentsController < ApplicationController
 
   # GET /comments or /comments.json
   def index
+    authenticate_user "Customer"
     @comments = Comment.all
   end
 
