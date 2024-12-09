@@ -19,4 +19,21 @@
     <%= order.phone %>
   </p>
 
+  <p>
+    <strong>Items:</strong>
+  </p>
+
+  <small>
+    <% OrderItem.where(order_id: order.id).each do |item| %>
+      <p>
+        <strong>Good:</strong>
+        <%= Good.where(id: item.good_id).name %>
+      </p>
+      <p>
+        <strong>Count:</strong>
+        <%= item.count %>
+      </p>
+    <% end %>
+  </small>
+
 </div>

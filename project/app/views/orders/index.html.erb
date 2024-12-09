@@ -6,11 +6,21 @@
 
 <div id="orders">
   <% @orders.each do |order| %>
-    <%= render order %>
+    <p>
+      <strong>Order ID: <%= order.id %></strong>
+    </p>
+    <p>
+      <strong>Receiver: </strong> <%= order.name %> (<%= order.phone %>, @<%= order.address %>)
+    </p>
+    <p>
+      <strong>Items Count: <%= OrderItem.where(order_id: order.id).count %></strong>
+    </p>
     <p>
       <%= link_to "Show this order", order %>
     </p>
+    <hr />
   <% end %>
 </div>
 
-<%= link_to "New order", new_order_path %>
+<%= link_to "New order", new_order_path %> |
+<%= link_to "Back to goods", goods_path %>

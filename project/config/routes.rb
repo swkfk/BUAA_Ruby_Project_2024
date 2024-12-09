@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :orders
+  resources :orders do
+    collection do
+      post "do_create_order"
+    end
+  end
   resources :order_items
   resources :comments
   resources :favorite_items

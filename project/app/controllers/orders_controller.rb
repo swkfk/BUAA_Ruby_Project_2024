@@ -57,6 +57,18 @@ class OrdersController < ApplicationController
     end
   end
 
+  def do_create_order
+    authenticate_user "Customer"
+    @order = Order.new(user_id: session[:current_userid], name: params[:name], address: params[:address], phone: params[:phone])
+    @order.save!
+    params[:items].each do |good_id, count|
+      unless good_id.nil? || count.nil? || count.to_i <= 0
+        OrderItem.create!(order_id: @order.id, good_id: good_id, count: count.to_i)
+      end
+    end
+    redirect_to orders_path, notice: "Order was successfully created."
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order

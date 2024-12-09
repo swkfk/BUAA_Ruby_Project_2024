@@ -2,7 +2,40 @@
 
 <h1>New order</h1>
 
-<%= render "form", order: @order %>
+<%= form_with url: do_create_order_orders_path, method: "post" do |form| %>
+  <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
+
+  <div>
+    Receiver Name: <%= form.text_field :name %>
+  </div>
+
+  <div>
+    Receiver Address: <%= form.text_field :address %>
+  </div>
+
+  <div>
+    Contact Phone: <%= form.text_field :phone %>
+  </div>
+
+  <div class="goods-list">
+    <h3>Choose Goods</h3>
+    <% Good.all.each do |good| %>
+      <div class="good-info">
+        <span class="good-name"><%= good.name %></span>
+        <span class="good-price">¥<%= good.price %></span>
+      </div>
+      <%=
+        form.number_field "items[#{good.id}]",
+                          in: 0..999,
+                          value: 0
+      %>
+      </div>
+    <% end %>
+
+    <div>
+      <%= form.submit "Create" %>
+    </div>
+<% end %>
 
 <br>
 
