@@ -1,19 +1,53 @@
-<h1>登录到 Ruby Mailer！</h1>
-<div style="color: red"><%= alert %></div>
-<div style="color: green"><%= notice %></div>
-
-<%= form_with url: do_login_users_path do %>
-  <p>
-    用户名：<%= text_field_tag :username %>
-  </p>
-
-  <p>
-    密码：<%= password_field_tag :password %>
-  </p>
-
-  <p>
-    用户类型：<%= select_tag :user_type, options_for_select([%w[用户 Customer], %w[商户 Merchant], %w[管理员 Admin]]) %>
-  </p>
-
-  <%= submit_tag '登录' %>
+<% if notice %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert" id="notice">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="document.getElementById('notice').remove();"></button>
+  </div>
 <% end %>
+
+<% if alert %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert">
+    <%= alert %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="document.getElementById('alert').remove();"></button>
+  </div>
+<% end %>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header text-center">
+          <h3>登录到 Ruby Mailer</h3>
+        </div>
+        <div class="card-body">
+          <%= form_with url: do_login_users_path do |form| %>
+            <div class="mb-3">
+              <%= form.label "用户名", class: "form-label" %>
+              <%= form.text_field :username, class: "form-control", placeholder: "输入用户名" %>
+            </div>
+            <div class="mb-3">
+              <%= form.label "密码", class: "form-label" %>
+              <%= form.password_field :password, class: "form-control", placeholder: "输入密码" %>
+            </div>
+            <div class="mb-3">
+              <%= form.label :user_type, "用户角色", class: "form-label" %>
+              <%= form.select :user_type,
+                              options_for_select([%w[用户 Customer],
+                                                  %w[商户 Merchant],
+                                                  %w[管理员 Admin]]),
+                              {},
+                              { class: "form-select" }
+              %>
+            </div>
+            <div class="d-grid">
+              <%= form.submit "登录", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+        <div>
+          <p class="text-center">还没有账号？<%= link_to "注册", register_users_path %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

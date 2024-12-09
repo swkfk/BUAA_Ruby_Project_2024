@@ -1,26 +1,57 @@
-<h1>注册新用户</h1>
-<div style="color: red"><%= alert %></div>
-
-<%= form_with url: do_register_users_path do %>
-  <p>
-    用户名：<%= text_field_tag :username %>
-  </p>
-
-  <p>
-    密码：<%= password_field_tag :password %>
-  </p>
-
-  <p>
-    确认密码：<%= password_field_tag :re_password %>
-  </p>
-
-  <p>
-    邮箱：<%= text_field_tag :email %>
-  </p>
-
-  <p>
-    用户类型：<%= select_tag :user_type, options_for_select([%w[用户 Customer], %w[商户 Merchant]]) %>
-  </p>
-
-  <%= submit_tag '注册' %>
+<% if notice %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert" id="notice">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="document.getElementById('notice').remove();"></button>
+  </div>
 <% end %>
+
+<% if alert %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert">
+    <%= alert %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="document.getElementById('alert').remove();"></button>
+  </div>
+<% end %>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header text-center">
+          <h3>注册</h3>
+        </div>
+        <div class="card-body">
+          <%= form_with url: do_register_users_path do |form| %>
+            <div class="mb-3">
+              <%= form.label "用户名", class: "form-label" %>
+              <%= form.text_field :username, class: "form-control", placeholder: "输入用户名" %>
+            </div>
+            <div class="mb-3">
+              <%= form.label "登录密码", class: "form-label" %>
+              <%= form.password_field :password, class: "form-control", placeholder: "输入密码" %>
+            </div>
+            <div class="mb-3">
+              <%= form.label "确认密码", class: "form-label" %>
+              <%= form.password_field :re_password, class: "form-control", placeholder: "确认密码" %>
+            </div>
+            <div class="mb-3">
+              <%= form.label "邮箱", class: "form-label" %>
+              <%= form.email_field :email, class: "form-control", placeholder: "输入邮箱" %>
+            </div>
+            <div class="mb-3">
+              <%= form.label :user_type, "用户角色", class: "form-label" %>
+              <%= form.select :user_type,
+                options_for_select([%w[用户 Customer],
+                %w[商户 Merchant]]),
+                {},
+                { class: "form-select" }
+                %>
+            </div>
+            <div class="d-grid">
+              <%= form.submit "注册", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
