@@ -1,15 +1,22 @@
-<p style="color: green"><%= notice %></p>
+<% if notice %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert" id="notice">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="document.getElementById('notice').remove();"></button>
+  </div>
+<% end %>
+
+<% if alert %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert">
+    <%= alert %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="document.getElementById('alert').remove();"></button>
+  </div>
+<% end %>
 
 <% content_for :title, "Goods" %>
 
-<h1>Goods</h1>
+<h1 class="text-center">商品总览</h1>
 
-<% if @current_user.nil? %>
-  <%= link_to "登录", login_users_path %>
-  <%= link_to "注册", register_users_path %>
-<% else %>
-  <p>欢迎回来，<b><%= @current_user.name %></b>！<%= link_to "退出登录", logout_users_path %></p>
-<% end %>
+<hr />
 
 <% if session[:current_role] == "Customer" %>
   <%= link_to "View Carts", cart_items_path %>
@@ -17,15 +24,23 @@
   <%= link_to "New Order", new_order_path %>
 <% end %>
 
-<div id="goods">
-  <% @goods.each do |good| %>
-    <%= render good %>
-    <% if session[:current_userid] && session[:current_role] != "Customer"  %>
-      <p>
-        <%= link_to "Show this good", good %>
-      </p>
+<div class="container mt-10">
+  <div class="row g-3">
+    <% @goods.each do |good| %>
+      <div class="col-lg-6 mb-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <%= render good %>
+          </div>
+        </div>
+        <% if session[:current_userid] && session[:current_role] != "Customer"  %>
+          <p>
+            <%= link_to "Show this good", good %>
+          </p>
+        <% end %>
+      </div>
     <% end %>
-  <% end %>
+  </div>
 </div>
 
 <% if session[:current_role] == "Merchant" || session[:current_role] == "Admin" %>
