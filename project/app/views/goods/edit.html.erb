@@ -1,12 +1,22 @@
 <% content_for :title, "Editing good" %>
 
-<h1>Editing good</h1>
+<div class="row m-3">
+  <%= link_to "返回商品总览", goods_path, class: "col-2 btn btn-primary" %>
+</div>
 
-<%= render "form", good: @good %>
+<hr />
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header text-center">
+          <h3>修改商品信息</h3>
+        </div>
+        <%= render "form", good: @good %>
+      </div>
+    </div>
+  </div>
+</div>
 
 <br>
-
-<div>
-  <%= link_to "Show this good", @good %> |
-  <%= link_to "Back to goods", goods_path %>
-</div>
