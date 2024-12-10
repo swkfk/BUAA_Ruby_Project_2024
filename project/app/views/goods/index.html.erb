@@ -14,7 +14,12 @@
 
 <% content_for :title, "Goods" %>
 
-<h1 class="text-center">商品总览</h1>
+<h1 class="text-center">
+  商品总览
+  <% if session[:current_role] == "Merchant" || session[:current_role] == "Admin" %>
+    <%= link_to "创建商品", new_good_path, class: "btn btn-primary" %>
+  <% end %>
+</h1>
 
 <hr />
 
@@ -27,16 +32,7 @@
             <%= render good %>
           </div>
         </div>
-        <% if session[:current_userid] && session[:current_role] != "Customer"  %>
-          <p>
-            <%= link_to "Show this good", good %>
-          </p>
-        <% end %>
       </div>
     <% end %>
   </div>
 </div>
-
-<% if session[:current_role] == "Merchant" || session[:current_role] == "Admin" %>
-  <%= link_to "New good", new_good_path %>
-<% end %>
