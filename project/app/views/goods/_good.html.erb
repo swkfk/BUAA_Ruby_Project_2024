@@ -19,21 +19,26 @@
 
   <% colors = GoodColorRelation.where(good_id: good.id) %>
   <% unless colors.empty? %>
-    <p class="card pt-7">
-      <strong class="text-center">商品色调</strong>
-      <% colors.map { |relation| AttrColor.where(id: relation.attr_color_id).first }.each do |color| %>
-        <span class="color-item">
-          <span class="color-circle" style="background-color: <%= color.rgb %>;"></span>
-          <span><%= color.name %></span>
-        </span>
-      <% end %>
-    </p>
+    <div class="card pt-7">
+      <div class="row">
+        <% colors.map { |relation| AttrColor.where(id: relation.attr_color_id).first }.each do |color| %>
+          <span class="color-item col-2">
+            <span class="color-circle" style="background-color: <%= color.rgb %>;"></span>
+            <span><%= color.name %></span>
+          </span>
+        <% end %>
+      </div>
+    </div>
   <% end %>
+
+  <hr />
+
+  <div class="row">
 
   <% if session[:current_userid] && session[:current_role] == "Customer" %>
     <% favorite_item = FavoriteItem.where(user_id: session[:current_userid], good_id: good.id).first %>
     <% if favorite_item.nil? %>
-      <%= form_with model: FavoriteItem do |form| %>
+      <%= form_with model: FavoriteItem, class: "col-6" do |form| %>
         <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
         <%= form.number_field :good_id, value: good.id, hidden: true %>
         <button type="submit" class="btn btn-danger">
@@ -43,7 +48,7 @@
         </button>
       <% end %>
     <% else %>
-      <%= form_with model: FavoriteItem, url: "/favorite_items/#{favorite_item.id}", method: "delete" do %>
+      <%= form_with model: FavoriteItem, url: "/favorite_items/#{favorite_item.id}", method: "delete", class: "col-6" do %>
         <button type="submit" class="btn btn-outline-danger">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
@@ -51,7 +56,47 @@
         </button>
       <% end %>
     <% end %>
+
+    <% cart_item = CartItem.where(user_id: session[:current_userid], good_id: good.id).first %>
+    <% if cart_item.nil? %>
+      <%= form_with model: CartItem, class: "col-6" do |form| %>
+        <div class="row">
+          <%= form.number_field :good_id, value: good.id, hidden: true %>
+          <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
+          <p class="col-4 my-auto" style="text-align: right">
+            购买数量：
+          </p>
+          <div class="col-3">
+            <%= form.number_field :count, in: 1..999, value: 1, class: "form-control" %>
+          </div>
+          <div class="col-5">
+            <%= form.submit "加入购物车", class: "btn btn-primary", style: "width: 100%" %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <%= form_with model: CartItem, url: "/cart_items/#{cart_item.id}", method: "put", class: "col-6" do |form| %>
+        <div class="row">
+          <%= form.number_field :good_id, value: good.id, hidden: true %>
+          <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
+          <p class="col-4 my-auto" style="text-align: right">
+            购买数量：
+          </p>
+          <div class="col-3">
+            <%= form.number_field :count, in: 0..999, value: cart_item.count, class: "form-control" %>
+          </div>
+          <div class="col-5">
+            <%= form.submit "更新数量", class: "btn btn-primary", style: "width: 100%" %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+    
   <% end %>
+
+  </div>
+
+  <hr />
 
   <span class="border-bottom border-secondary fw-bolder">商品评论</span>
 
@@ -120,41 +165,23 @@
 
   <% if session[:current_userid] && session[:current_role] == "Customer" %>
     <% unless has_commented %>
-      <%= form_with model: Comment do |form| %>
-        <%= form.number_field :good_id, value: good.id, hidden: true %>
-        <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
-        <div class="mb-3">
-          <%= form.label "评论内容", class: "form-label" %>
-          <%= form.text_area :content, class: "form-control"%>
-        </div>
-        <div class="mb-3">
-          <%= form.label "评分星级", class: "form-label" %>
-          <%= form.number_field :score, in: 1..5, value: 5, class: "form-control"%>
-        </div>
-        <span class="d-grid">
-          <%= form.submit "发表评论" %>
-        </span>
-      <% end %>
-    <% end %>
-  <% end %>
-
-  <% if session[:current_userid] && session[:current_role] == "Customer" %>
-    <% cart_item = CartItem.where(user_id: session[:current_userid], good_id: good.id).first %>
-    <% if cart_item.nil? %>
-      <%= form_with(model: CartItem) do |form| %>
-        <%= form.number_field :good_id, value: good.id, hidden: true %>
-        <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
-        <%= form.number_field :count, in: 1..999, value: 1 %>
-        <%= form.submit "Add to cart" %>
-      <% end %>
-    <% else %>
-      Have added to cart, count: <%= cart_item.count %>
-      <%= form_with model: CartItem, url: "/cart_items/#{cart_item.id}", method: "put" do |form| %>
-        <%= form.number_field :good_id, value: good.id, hidden: true %>
-        <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
-        <%= form.number_field :count, in: 0..999, value: cart_item.count %>
-        <%= form.submit "Change the count" %>
-      <% end %>
+      <div class="card mt-3 p-3">
+        <%= form_with model: Comment do |form| %>
+          <%= form.number_field :good_id, value: good.id, hidden: true %>
+          <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
+          <div class="mb-3">
+            <%= form.label "评论内容", class: "form-label" %>
+            <%= form.text_area :content, class: "form-control"%>
+          </div>
+          <div class="mb-3">
+            <%= form.label "评分星级", class: "form-label" %>
+            <%= form.number_field :score, in: 1..5, value: 5, class: "form-control"%>
+          </div>
+          <span class="d-grid">
+            <%= form.submit "发表评论" %>
+          </span>
+        <% end %>
+      </div>
     <% end %>
   <% end %>
 </div>
