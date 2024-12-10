@@ -1,58 +1,34 @@
 <div id="<%= dom_id good %>">
-  <p>
-    <strong>Name:</strong>
-    <%= good.name %>
-  </p>
+  <h5 class="card-title"><%= good.name %></h5>
+  <p class="card-text text-muted"><%= good.description %></p>
+  <div class="d-flex justify-content-between align-items-center">
+    <span class="text-danger fw-bold">¥<%= number_with_precision(good.price, precision: 2) %></span>
+    <% if session[:current_userid] && session[:current_role] != "Customer" %>
+      <%= link_to "查看详情", good, class: "btn btn-sm btn-outline-primary" %>
+    <% end %>
+  </div>
 
-  <p>
-    <strong>Description:</strong>
-    <%= good.description %>
-  </p>
+  <hr />
 
-  <p>
-    <strong>Price:</strong>
-    <%= number_with_precision(good.price, precision: 2) %>
-  </p>
-
-  <p>
-    <strong>Tags:</strong>
+  <div class="mb-3">
     <% GoodTagRelation.where(good_id: good.id).map { |relation| AttrTag.where(id: relation.attr_tag_id).first }.each do |tag| %>
-      <span class="tag-badge"><%= tag.name %></span>
+      <span class="badge bg-primary fs-6"><%= tag.name %></span>
     <% end %>
-  </p>
+  </div>
 
-  <p>
-    <strong>Colors:</strong>
-    <% GoodColorRelation.where(good_id: good.id).map { |relation| AttrColor.where(id: relation.attr_color_id).first }.each do |color| %>
-      <span class="color-item">
-        <%= color.name %>
-        <span class="color-circle" style="background-color: <%= color.rgb %>;"></span>
-      </span>
-    <% end %>
-  </p>
 
-  <p>
-    <strong>Comments:</strong>
-    <% Comment.where(good_id: good.id).each do |comment| %>
-      <% if comment.user.id == session[:current_userid] %>
-        <%= form_with model: Comment, url: "/comments/#{comment.id}", method: "put" do |form| %>
-          <%= form.text_area :content, value: comment.content %>
-          <%= form.number_field :score, in: 1..5, value: comment.score %>
-          <%= form.submit "Update" %>
-        <% end %>
-        <%= form_with model: Comment, url: "/comments/#{comment.id}", method: "delete" do |form| %>
-          <%= form.submit "Delete" %>
-        <% end %>
-      <% else %>
-        <p>
-          <%= comment.user.name %>:
-          <strong><%= comment.content %></strong>
-          Score: <%= comment.score %>
-          <%= comment.updated_at %>
-        </p>
+  <% colors = GoodColorRelation.where(good_id: good.id) %>
+  <% unless colors.empty? %>
+    <p class="card pt-7">
+      <strong class="text-center">商品色调</strong>
+      <% colors.map { |relation| AttrColor.where(id: relation.attr_color_id).first }.each do |color| %>
+        <span class="color-item">
+          <span class="color-circle" style="background-color: <%= color.rgb %>;"></span>
+          <span><%= color.name %></span>
+        </span>
       <% end %>
-    <% end %>
-  </p>
+    </p>
+  <% end %>
 
   <% if session[:current_userid] && session[:current_role] == "Customer" %>
     <% favorite_item = FavoriteItem.where(user_id: session[:current_userid], good_id: good.id).first %>
@@ -60,11 +36,104 @@
       <%= form_with model: FavoriteItem do |form| %>
         <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
         <%= form.number_field :good_id, value: good.id, hidden: true %>
-        <%= form.submit "Add to Favorite!" %>
+        <button type="submit" class="btn btn-danger">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+          </svg> 收藏
+        </button>
       <% end %>
     <% else %>
-      <%= form_with model: FavoriteItem, url: "/favorite_items/#{favorite_item.id}", method: "delete" do |form| %>
-        <%= form.submit "Remove from Favorite!" %>
+      <%= form_with model: FavoriteItem, url: "/favorite_items/#{favorite_item.id}", method: "delete" do %>
+        <button type="submit" class="btn btn-outline-danger">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+          </svg> 取消收藏
+        </button>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <span class="border-bottom border-secondary fw-bolder">商品评论</span>
+
+  <% has_commented = false %>
+  <% self_comment = nil %>
+  <% Comment.where(good_id: good.id).each do |comment| %>
+    <% if comment.user.id == session[:current_userid] %>
+      <% has_commented = true %>
+      <% self_comment = comment %>
+    <% else %>
+      <div class="card mt-3">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 text-primary fw-bolder"><%= comment.user.name %>：</div>
+            <div class="col-md-6 fst-italic fw-lighter" style="text-align: right"><%= comment.updated_at.localtime.strftime "%Y-%m-%d %H:%M:%S" %></div>
+          </div>
+          <div class="row">
+            <strong class="p-4 text-muted"><%= comment.content %></strong>
+          </div>
+          <div class="row fw-bolder">
+            <p>评分：
+              <span class="p-2">
+                <% (1..comment.score).each do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                  </svg>
+                <% end %>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% unless self_comment.nil? %>
+    <div class="card mt-3 p-3">
+      <%= form_with model: Comment, url: "/comments/#{self_comment.id}", method: "put" do |form| %>
+        <div class="mb-3">
+          <%= form.label "评论内容", class: "form-label" %>
+          <%= form.text_area :content, value: self_comment.content, class: "form-control"%>
+        </div>
+        <div class="mb-3">
+          <%= form.label "评分星级", class: "form-label" %>
+          <%= form.number_field :score, in: 1..5, value: self_comment.score, class: "form-control"%>
+        </div>
+        <span class="d-grid">
+          <%= form.submit "更新评论" %>
+        </span>
+      <% end %>
+      <%= form_with model: Comment, url: "/comments/#{self_comment.id}", method: "delete" do |form_delete| %>
+          <span class="d-grid">
+            <%= form_delete.submit "删除评论" %>
+          </span>
+      <% end %>
+
+      <p class="text-center mt-2">
+        发布于
+        <span class="fst-italic fw-lighter"><%= self_comment.created_at.localtime.strftime "%Y-%m-%d %H:%M:%S" %></span> |
+        修改于
+        <span class="fst-italic fw-lighter"><%= self_comment.updated_at.localtime.strftime "%Y-%m-%d %H:%M:%S" %></span>
+      </p>
+
+    </div>
+  <% end %>
+
+  <% if session[:current_userid] && session[:current_role] == "Customer" %>
+    <% unless has_commented %>
+      <%= form_with model: Comment do |form| %>
+        <%= form.number_field :good_id, value: good.id, hidden: true %>
+        <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
+        <div class="mb-3">
+          <%= form.label "评论内容", class: "form-label" %>
+          <%= form.text_area :content, class: "form-control"%>
+        </div>
+        <div class="mb-3">
+          <%= form.label "评分星级", class: "form-label" %>
+          <%= form.number_field :score, in: 1..5, value: 5, class: "form-control"%>
+        </div>
+        <span class="d-grid">
+          <%= form.submit "发表评论" %>
+        </span>
       <% end %>
     <% end %>
   <% end %>
@@ -87,29 +156,18 @@
         <%= form.submit "Change the count" %>
       <% end %>
     <% end %>
-    <%= form_with model: Comment do |form| %>
-      <%= form.number_field :good_id, value: good.id, hidden: true %>
-      <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
-      <p>
-        Comments: <%= form.text_area :content %>
-      </p>
-      <p>
-        Your Score: <%= form.number_field :score, in: 1..5, value: 5 %>
-      </p>
-      <%= form.submit "Add comment" %>
-    <% end %>
   <% end %>
 </div>
 
 <style>
-    .color-circle {
-        display: inline-block;
-        width: 15px;
-        height: 15px;
-        border-radius: 50%;
-        margin-left: 10px;
-        margin-bottom: 4px;
-        vertical-align: middle;
-        border: 1px solid #ddd;
-    }
+  .color-circle {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-left: 10px;
+    margin-bottom: 4px;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+  }
 </style>

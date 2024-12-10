@@ -18,12 +18,6 @@
 
 <hr />
 
-<% if session[:current_role] == "Customer" %>
-  <%= link_to "View Carts", cart_items_path %>
-  <%= link_to "View Favorites", favorite_items_path %>
-  <%= link_to "New Order", new_order_path %>
-<% end %>
-
 <div class="container mt-10">
   <div class="row g-3">
     <% @goods.each do |good| %>
