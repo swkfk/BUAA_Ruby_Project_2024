@@ -1,4 +1,4 @@
-test-blog4:
+test-project:
   stage: test
   script:
     - cd project
@@ -9,12 +9,13 @@ test-blog4:
   only:
     - project
 
-deploy-blog4:
+deploy-project:
   stage: deploy
   script:
     - rsync -arv --delete  --exclude="*.sqlite3" ./project /
     - cd /project
     - bundle install
+    - export RAILS_MASTER_KEY=$RAILS_MASTER_KEY
     - rails db:migrate
     - rails db:seed  # Useful if I changed the db/seeds.rb
     - sv restart project
