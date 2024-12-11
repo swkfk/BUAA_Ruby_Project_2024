@@ -8,12 +8,17 @@ class ImageController < ApplicationController
     @image = Image.new
   end
 
+  def delete
+    image = Image.find(params[:id].to_i)
+    if image && image.user_id == session[:current_userid]
+      image.destroy!
+    end
+    redirect_to "/image/index"
+  end
+
   def create
-    puts ">>>> Enter! <<<<"
-    @image = Image.new(user_id: params[:user_id], file: params[:file])
-    puts ">>>> Created! <<<<"
+    @image = Image.new(user_id: params[:user_id].to_i, file: params[:file], title: params[:title])
     @image.save!
-    puts ">>>> Saved! <<<<"
     redirect_to "/image/index"
   end
 
