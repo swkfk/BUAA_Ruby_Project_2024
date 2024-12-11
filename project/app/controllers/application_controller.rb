@@ -5,9 +5,11 @@ class ApplicationController < ActionController::Base
   helper_method :authenticate_user
 
   def authenticate_user(*roles)
-    unless roles.empty? or (session[:current_userid] and (roles.include? session[:current_role]))
-      redirect_to login_users_path, alert: "Please login first."
-      return
+    if !(roles.include? "Visitor")
+      unless session[:current_userid] and (roles.empty? or roles.include? session[:current_role])
+        redirect_to login_users_path, alert: "Please login first."
+        return
+      end
     end
     if session[:current_userid]
       @current_user ||= User.find(session[:current_userid])

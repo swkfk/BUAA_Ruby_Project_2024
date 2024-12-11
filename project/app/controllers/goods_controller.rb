@@ -3,27 +3,25 @@ class GoodsController < ApplicationController
 
   # GET /goods or /goods.json
   def index
-    authenticate_user
+    authenticate_user "Visitor"
     @goods = Good.all
   end
 
   # GET /goods/1 or /goods/1.json
   def show
+    authenticate_user "Merchant", "Admin"
   end
 
   # GET /goods/new
   def new
-    unless session[:current_role] == "Merchant" || session[:current_role] == "Admin"
-      flash[:notice] = "Only merchants and admins can create goods"
-      redirect_to goods_path
-      return
-    end
+    authenticate_user "Merchant", "Admin"
 
     @good = Good.new
   end
 
   # GET /goods/1/edit
   def edit
+    authenticate_user "Merchant", "Admin"
   end
 
   # POST /goods or /goods.json
