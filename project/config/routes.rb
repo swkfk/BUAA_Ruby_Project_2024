@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  get "image/index"
-  get "image/new"
+  get "images", to: "images#index"
   post "image/create"
   delete "image/delete"
+
   resources :orders do
     collection do
       post "do_create_order"

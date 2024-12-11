@@ -1,9 +1,0 @@
-<h1>Image#new</h1>
-
-<%= form_with url: 'create', method: 'post' do |form| %>
-  <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %> 
-  <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
-  <%= form.file_field :file %>
-  Title: <%= form.text_field :title %>
-  <%= form.submit "Submit" %>
-<% end %>

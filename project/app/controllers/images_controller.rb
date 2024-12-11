@@ -1,11 +1,7 @@
-class ImageController < ApplicationController
+class ImagesController < ApplicationController
   def index
     authenticate_user
     @images = Image.where(user_id: session[:current_userid])
-  end
-
-  def new
-    @image = Image.new
   end
 
   def delete
@@ -21,10 +17,4 @@ class ImageController < ApplicationController
     @image.save!
     redirect_to "/image/index"
   end
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_image
-      @image = Image.find(params[:id])
-    end
 end
