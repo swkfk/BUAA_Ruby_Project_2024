@@ -15,8 +15,9 @@ deploy-project:
     - rsync -arv --delete  --exclude="*.sqlite3" ./project /
     - cd /project
     - bundle install
-    - RAILS_MASTER_KEY=$RAILS_MASTER_KEY rails db:migrate
-    - RAILS_MASTER_KEY=$RAILS_MASTER_KEY rails db:seed  # Useful if I changed the db/seeds.rb
-    - RAILS_MASTER_KEY=$RAILS_MASTER_KEY sv restart project
+    - echo "Got the key: '$RAILS_MASTER_KEY'"
+    - RAILS_MASTER_KEY="$RAILS_MASTER_KEY" rails db:migrate
+    - RAILS_MASTER_KEY="$RAILS_MASTER_KEY" rails db:seed  # Useful if I changed the db/seeds.rb
+    - RAILS_MASTER_KEY="$RAILS_MASTER_KEY" sv restart project
   only:
     - project
