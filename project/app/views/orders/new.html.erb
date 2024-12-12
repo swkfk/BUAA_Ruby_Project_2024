@@ -44,7 +44,7 @@
                   <%=
                     form.number_field "items[#{good.id}]",
                                       in: 0..999,
-                                      value: 0,
+                                      value: CartItem.where(user_id: session[:current_userid], good_id: good.id).first&.count || 0,
                                       class: "form-control"
                   %>
                 </span>
