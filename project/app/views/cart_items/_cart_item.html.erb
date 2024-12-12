@@ -1,12 +1,84 @@
 <div id="<%= dom_id cart_item %>">
-  <p>
-    <strong>Good:</strong>
-    <%= Good.where(id: cart_item.good_id).first.name %>
-  </p>
+  <% good = cart_item.good %>
 
-  <p>
-    <strong>Count:</strong>
-    <%= cart_item.count %>
-  </p>
+  <div class="row">
+    <div class="col-12">
+      <h4><%= good.name %></h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <p><%= good.description %></p>
+    </div>
+  </div>
+
+  <div class="row">
+    <% good.images.each do |image| %>
+      <%= image_tag image.file, class: "img-fluid img-thumbnail col-3", style: "object-fit: contain" %>
+    <% end %>
+  </div>
+
+  <div class="row">
+    <% GoodTagRelation.where(good_id: good.id).map { |relation| AttrTag.where(id: relation.attr_tag_id).first }.each do |tag| %>
+      <span class="badge bg-primary fs-6 col-1 m-1"><%= tag.name %></span>
+    <% end %>
+  </div>
+
+  <% colors = GoodColorRelation.where(good_id: good.id) %>
+  <% unless colors.empty? %>
+    <div class="row">
+      <% colors.map { |relation| AttrColor.where(id: relation.attr_color_id).first }.each do |color| %>
+        <span class="color-item col-1 m-1">
+          <span class="color-circle" style="background-color: <%= color.rgb %>;"></span>
+          <span><%= color.name %></span>
+        </span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="row mt-3">
+    <div class="col-12">
+      <p class="fw-bold">售价：<%= good.price %> × <%= cart_item.count %> = <%= good.price * cart_item.count %> </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <%= form_with model: CartItem, url: "/cart_items/#{cart_item.id}", method: "put", class: "col-4" do |form| %>
+      <div class="row">
+        <%= form.number_field :good_id, value: good.id, hidden: true %>
+        <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
+        <p class="col-3 my-auto">
+          购买数量：
+        </p>
+        <div class="col-3">
+          <%= form.number_field :count, in: 0..999, value: cart_item.count, class: "form-control" %>
+        </div>
+        <div class="col-6">
+          <%= form.submit "更新数量", class: "btn btn-primary", style: "width: 100%" %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= form_with model: CartItem, url: "/cart_items/#{cart_item.id}", method: "put", class: "col-2" do |form| %>
+      <%= form.number_field :good_id, value: good.id, hidden: true %>
+      <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
+      <%= form.number_field :count, value: 0, hidden: true %>
+      <%= form.submit "移除商品", class: "btn btn-danger", style: "width: 100%" %>
+    <% end %>
+  </div>
 
 </div>
+
+<style>
+  .color-circle {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-left: 10px;
+    margin-bottom: 4px;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+  }
+</style>

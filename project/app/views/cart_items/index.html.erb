@@ -2,14 +2,20 @@
 
 <% content_for :title, "Cart items" %>
 
-<h1>Cart items</h1>
+<div class="container">
+  <h1 class="text-center">购物车</h1>
 
-<div id="cart_items">
-  <% @cart_items.each do |cart_item| %>
-    <% unless CartItem.where(user_id: session[:current_userid]).empty? %>
-        <%= render cart_item %>
+  <div id="cart_items">
+    <% @cart_items.each do |cart_item| %>
+      <% unless CartItem.where(user_id: session[:current_userid]).empty? %>
+        <div class="card m-3 p-3">
+          <%= render cart_item %>
+        </div>
+      <% end %>
     <% end %>
-  <% end %>
-</div>
+  </div>
 
-<%= link_to "Back to Goods", goods_path %>
+  <div class="row m-3">
+    <%= link_to "返回商品总览", goods_path, class: "offset-5 col-2 btn btn-primary" %>
+  </div>
+</div>
