@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_11_090406) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_12_131837) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -107,6 +107,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_11_090406) do
     t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "goods_images", id: false, force: :cascade do |t|
+    t.integer "good_id", null: false
+    t.integer "image_id", null: false
+    t.index ["good_id"], name: "index_goods_images_on_good_id"
+    t.index ["image_id"], name: "index_goods_images_on_image_id"
   end
 
   create_table "images", force: :cascade do |t|

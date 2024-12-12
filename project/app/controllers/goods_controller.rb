@@ -26,7 +26,14 @@ class GoodsController < ApplicationController
 
   # POST /goods or /goods.json
   def create
-    @good = Good.new(good_params)
+    @good = Good.create(name: good_params[:name], price: good_params[:price], description: good_params[:description])
+
+    good_params[:image_ids].each do |image_id|
+      image = Image.first(image_id.to_i)
+      unless image.nil?
+        @good.images << image
+      end
+    end
 
     respond_to do |format|
       if @good.save
@@ -96,6 +103,6 @@ class GoodsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def good_params
-      params.require(:good).permit(:name, :price, :description)
+      params.require(:good).permit(:name, :price, :description, image_ids: [])
     end
 end

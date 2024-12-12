@@ -25,7 +25,19 @@
       <%= form.label :description, "描述", style: "display: block" %>
       <%= form.text_area :description, class: "form-control", placeholder: "请输入商品描述" %>
     </div>
-  
+
+    <div class="mb-3">
+      <%= form.label :description, "选择商品图片", style: "display: block" %>
+      <div class="row">
+        <%= form.collection_check_boxes :image_ids, Image.where(user_id: session[:current_userid]), :id, :title do |b| %>
+          <div class="checkbox col-3">
+            <%= b.check_box %>
+            <%= b.label class: "text-capitalize" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
     <div class="mb-3">
       <%= form.submit "保存商品", class: "form-control btn btn-primary" %>
     </div>
