@@ -31,20 +31,33 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
             <li class="nav-item">
-              <a class="nav-link <%= current_page?(controller: 'goods') ? "active" : "" %>" href=<%= goods_path %>>商品预览</a>
+              <a class="nav-link <%= current_page?(controller: 'goods') ? "active" : "" %>" href=<%= goods_path %>>商品总览</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link <%= current_page?(controller: 'cart_items') ? "active" : "" %>" href=<%= cart_items_path %>>购物车</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link <%= current_page?(controller: 'favorite_items') ? "active" : "" %>" href=<%= favorite_items_path %>>收藏夹</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link <%= current_page?(controller: 'orders') ? "active" : "" %>" href=<%= orders_path %>>订单</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link <%= current_page?(controller: 'images') ? "active" : "" %>" href=<%= images_path %>>图床</a>
-            </li>
+            <% if %w[Customer].include? session[:current_role] %>
+              <li class="nav-item">
+                <a class="nav-link <%= current_page?(controller: 'cart_items') ? "active" : "" %>" href=<%= cart_items_path %>>购物车</a>
+              </li>
+            <% end %>
+            <% if %w[Customer].include? session[:current_role] %>
+              <li class="nav-item">
+                <a class="nav-link <%= current_page?(controller: 'favorite_items') ? "active" : "" %>" href=<%= favorite_items_path %>>收藏夹</a>
+              </li>
+            <% end %>
+            <% if %w[Customer Merchant].include? session[:current_role] %>
+              <li class="nav-item">
+                <a class="nav-link <%= current_page?(controller: 'orders') ? "active" : "" %>" href=<%= orders_path %>>订单</a>
+              </li>
+            <% end %>
+            <% if %w[Admin].include? session[:current_role] %>
+              <li class="nav-item">
+                <a class="nav-link <%= current_page?('/admin') ? "active" : "" %>" href=<%= admin_path %>>管理后台</a>
+              </li>
+            <% end %>
+            <% if session[:current_userid] %>
+              <li class="nav-item">
+                <a class="nav-link <%= current_page?(controller: 'images') ? "active" : "" %>" href=<%= images_path %>>图床</a>
+              </li>
+            <% end %>
           </ul>
           <ul class="navbar-nav navbar-right">
             <% if @current_user.nil? %>

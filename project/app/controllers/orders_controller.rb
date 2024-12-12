@@ -3,7 +3,7 @@ class OrdersController < ApplicationController
 
   # GET /orders or /orders.json
   def index
-    authenticate_user "Customer"
+    authenticate_user "Customer", "Merchant"
     @orders = Order.all
   end
 
