@@ -2,12 +2,17 @@
 
 <% content_for :title, "Favorite items" %>
 
-<h1>Favorite items</h1>
+<div class="container">
+  <h1 class="text-center">收藏夹</h1>
+  <div id="favorite_items">
+    <% @favorite_items.each do |favorite_item| %>
+      <div class="card m-3 p-4">
+        <%= render favorite_item %>
+      </div>
+    <% end %>
+  </div>
 
-<div id="favorite_items">
-  <% @favorite_items.each do |favorite_item| %>
-    <%= render favorite_item %>
-  <% end %>
+  <div class="row m-3">
+    <%= link_to "返回商品总览", goods_path, class: "offset-5 col-2 btn btn-primary" %>
+  </div>
 </div>
-
-<%= link_to "Go Back", goods_path %>  
