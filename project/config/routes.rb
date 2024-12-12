@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
-  get "images", to: "images#index"
-  post "image/create"
-  delete "image/delete"
+  resources :images, only: [ :index, :create, :destroy ]
 
   resources :orders do
     collection do
