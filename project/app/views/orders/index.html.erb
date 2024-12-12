@@ -2,25 +2,74 @@
 
 <% content_for :title, "Orders" %>
 
-<h1>Orders</h1>
 
-<div id="orders">
-  <% @orders.each do |order| %>
-    <p>
-      <strong>Order ID: <%= order.id %></strong>
-    </p>
-    <p>
-      <strong>Receiver: </strong> <%= order.name %> (<%= order.phone %>, @<%= order.address %>)
-    </p>
-    <p>
-      <strong>Items Count: <%= OrderItem.where(order_id: order.id).count %></strong>
-    </p>
-    <p>
-      <%= link_to "Show this order", order %>
-    </p>
-    <hr />
-  <% end %>
+<div class="container">
+  <h1 class="text-center">订单</h1>
+
+  <div id="orders">
+    <% @orders.each do |order| %>
+      <div class="card p-3">
+        <h5>
+          <strong>收货人：</strong> <%= order.name %>
+        </h5>
+        <% unless order.address == "" %>
+          <p>
+            <strong>收货地址：</strong>
+            <%= order.address %>
+          </p>
+        <% end %>
+        <% unless order.phone == "" %>
+          <p>
+            <strong>联系电话：</strong>
+            <%= order.phone %>
+          </p>
+        <% end %>
+
+        <div class="row">
+          <% total_price = 0 %>
+          <% OrderItem.where(order_id: order.id).each do |item| %>
+            <% good = Good.where(id: item.good_id).first %>
+            <% unless good.nil? %>
+              <div class="card col-4 m-2 p-1">
+                <p>
+                  <strong>商品名称：</strong>
+                  <%= good.name %>
+                </p>
+                <p>
+                  <strong>商品价格：</strong>
+                  ¥<%= good.price %>
+                </p>
+                <div class="row">
+                  <p class="col-6">
+                    <strong>订货数量：</strong>
+                    <%= item.count %>
+                  </p>
+                  <div class="col-6">
+                    <strong>总价：</strong>
+                    ¥<%= good.price * item.count %>
+                    <% total_price += good.price * item.count %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+        <p>
+          <strong>总价：</strong>
+          ¥<%= total_price %>
+        </p>
+        <div class="row p-2">
+          <%= form_with url: order_path(order), method: "delete", class: "col-2 p-0" do |form| %>
+            <%= form.submit "删除订单", class: "form-control btn btn-danger" %>
+          <% end %>
+          <%= link_to "编辑订单", edit_order_path(order), class: "col-2 btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="row m-3">
+    <%= link_to "返回商品总览", goods_path, class: "offset-2 col-3 btn btn-primary" %>
+    <%= link_to "新建订单", new_order_path, class: "offset-2 col-3 btn btn-primary" %>
+  </div>
 </div>
-
-<%= link_to "New order", new_order_path %> |
-<%= link_to "Back to goods", goods_path %>
