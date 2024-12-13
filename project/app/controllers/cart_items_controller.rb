@@ -1,24 +1,11 @@
 class CartItemsController < ApplicationController
-  before_action :set_cart_item, only: %i[ show edit update destroy ]
+  before_action :set_cart_item, only: %i[ update destroy ]
 
   # GET /cart_items or /cart_items.json
   def index
     return unless authenticate_user "Customer"
 
     @cart_items = CartItem.all
-  end
-
-  # GET /cart_items/1 or /cart_items/1.json
-  def show
-  end
-
-  # GET /cart_items/new
-  def new
-    @cart_item = CartItem.new
-  end
-
-  # GET /cart_items/1/edit
-  def edit
   end
 
   # POST /cart_items or /cart_items.json

@@ -1,23 +1,5 @@
 class AttrTagsController < ApplicationController
-  before_action :set_attr_tag, only: %i[ show edit update destroy ]
-
-  # GET /attr_tags or /attr_tags.json
-  def index
-    @attr_tags = AttrTag.all
-  end
-
-  # GET /attr_tags/1 or /attr_tags/1.json
-  def show
-  end
-
-  # GET /attr_tags/new
-  def new
-    @attr_tag = AttrTag.new
-  end
-
-  # GET /attr_tags/1/edit
-  def edit
-  end
+  before_action :set_attr_tag, only: %i[ update destroy ]
 
   def create
     return unless authenticate_user "Admin"

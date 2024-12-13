@@ -1,23 +1,5 @@
 class AttrColorsController < ApplicationController
-  before_action :set_attr_color, only: %i[ show edit update destroy ]
-
-  # GET /attr_colors or /attr_colors.json
-  def index
-    @attr_colors = AttrColor.all
-  end
-
-  # GET /attr_colors/1 or /attr_colors/1.json
-  def show
-  end
-
-  # GET /attr_colors/new
-  def new
-    @attr_color = AttrColor.new
-  end
-
-  # GET /attr_colors/1/edit
-  def edit
-  end
+  before_action :set_attr_color, only: %i[ update destroy ]
 
   # POST /attr_colors or /attr_colors.json
   def create

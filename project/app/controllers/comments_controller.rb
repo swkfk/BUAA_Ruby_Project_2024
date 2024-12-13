@@ -1,25 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :set_comment, only: %i[ show edit update destroy ]
-
-  # GET /comments or /comments.json
-  def index
-    return unless authenticate_user "Customer"
-
-    @comments = Comment.all
-  end
-
-  # GET /comments/1 or /comments/1.json
-  def show
-  end
-
-  # GET /comments/new
-  def new
-    @comment = Comment.new
-  end
-
-  # GET /comments/1/edit
-  def edit
-  end
+  before_action :set_comment, only: %i[ update destroy ]
 
   # POST /comments or /comments.json
   def create

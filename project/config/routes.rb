@@ -6,20 +6,20 @@ Rails.application.routes.draw do
       post "do_create_order"
     end
   end
-  resources :order_items
-  resources :comments
-  resources :favorite_items
-  resources :cart_items
+  resources :order_items, only: []
+  resources :comments, except: [ :index, :show, :new, :edit ]
+  resources :favorite_items, except: [ :edit, :update ]
+  resources :cart_items, except: [ :show, :new, :edit ]
   resources :goods do
     collection do
       get "edit_good_attribute"
       post "do_edit_good_attribute"
     end
   end
-  resources :attr_colors
-  resources :attr_tags
+  resources :attr_colors, except: [ :index, :show, :new, :edit ]
+  resources :attr_tags, except: [ :index, :show, :new, :edit ]
 
-  resources :users do
+  resources :users, except: [ :index, :destroy ] do
     collection do
       get "login"
       post "do_login"
@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :user_roles
+  resources :user_roles, only: []
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   get "admin" => "users#admin"

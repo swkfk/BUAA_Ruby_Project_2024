@@ -1,5 +1,5 @@
 class FavoriteItemsController < ApplicationController
-  before_action :set_favorite_item, only: %i[ show edit update destroy ]
+  before_action :set_favorite_item, only: %i[ show destroy ]
 
   # GET /favorite_items or /favorite_items.json
   def index
@@ -16,10 +16,6 @@ class FavoriteItemsController < ApplicationController
     @favorite_item = FavoriteItem.new
   end
 
-  # GET /favorite_items/1/edit
-  def edit
-  end
-
   # POST /favorite_items or /favorite_items.json
   def create
     return unless authenticate_user "Customer"
@@ -31,20 +27,6 @@ class FavoriteItemsController < ApplicationController
         format.json { render :show, status: :created, location: @favorite_item }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @favorite_item.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /favorite_items/1 or /favorite_items/1.json
-  def update
-    return unless (authenticate_user "Customer") && (assert_current_user @favorite_item.user_id)
-    respond_to do |format|
-      if @favorite_item.update(favorite_item_params)
-        format.html { redirect_to @favorite_item, notice: "Favorite item was successfully updated." }
-        format.json { render :show, status: :ok, location: @favorite_item }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @favorite_item.errors, status: :unprocessable_entity }
       end
     end
