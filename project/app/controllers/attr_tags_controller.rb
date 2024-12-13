@@ -25,7 +25,7 @@ class AttrTagsController < ApplicationController
 
     respond_to do |format|
       if @attr_tag.save
-        format.html { redirect_to attr_tags_path, notice: "Attr tag was successfully created." }
+        format.html { redirect_to admin_path, notice: "Attr tag was successfully created." }
         format.json { render :show, status: :created, location: @attr_tag }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -54,7 +54,7 @@ class AttrTagsController < ApplicationController
     @attr_tag.destroy!
 
     respond_to do |format|
-      format.html { redirect_to attr_tags_path, status: :see_other, notice: "Attr tag was successfully destroyed." }
+      format.html { redirect_to admin_path, status: :see_other, notice: "Attr tag was successfully destroyed." }
       format.json { head :no_content }
     end
   end
