@@ -12,7 +12,7 @@
             <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
             <div class="mb-3">
               <%= form.label "收货人姓名", class: "form-label" %>
-              <%= form.text_field :name, class: "form-control", placeholder: "输入姓名" %>
+              <%= form.text_field :name, class: "form-control", placeholder: "输入姓名（必填）" %>
             </div>
 
             <div class="mb-3">

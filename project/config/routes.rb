@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :images, only: [ :index, :create, :destroy ]
 
-  resources :orders do
+  resources :orders, except: [ :create ] do
     collection do
       post "do_create_order"
     end

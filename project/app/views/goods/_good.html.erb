@@ -125,7 +125,7 @@
               <div class="col-md-6 fst-italic fw-lighter" style="text-align: right"><%= comment.updated_at.localtime.strftime "%Y-%m-%d %H:%M:%S" %></div>
             </div>
             <div class="row">
-              <strong class="p-4 text-muted"><%= comment.content %></strong>
+              <strong class="p-4 text-muted"><%= comment.content.empty? ? "（该评论没有内容）" : comment.content %></strong>
             </div>
             <div class="row fw-bolder">
               <p>评分：

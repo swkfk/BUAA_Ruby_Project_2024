@@ -20,24 +20,13 @@ class OrdersController < ApplicationController
   def edit
   end
 
-  # POST /orders or /orders.json
-  def create
-    @order = Order.new(order_params)
-
-    respond_to do |format|
-      if @order.save
-        format.html { redirect_to @order, notice: "成功创建订单" }
-        format.json { render :show, status: :created, location: @order }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @order.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   # PATCH/PUT /orders/1 or /orders/1.json
   def update
     return unless (authenticate_user "Customer") && (assert_current_user @order.user_id)
+    if params[:order][:name].empty?
+      redirect_to new_order_path, notice: "收货人不能为空"
+      return
+    end
     params[:order].each do |good_id, count|
       # It is terrible to use this way! But I have no time to fix it.
       if good_id == "user_id" || good_id == "name" || good_id == "address" || good_id == "phone" || good_id.nil? || count.nil?
@@ -82,6 +71,10 @@ class OrdersController < ApplicationController
 
   def do_create_order
     authenticate_user "Customer"
+    if params[:name].empty?
+      redirect_to new_order_path, notice: "收货人不能为空"
+      return
+    end
     @order = Order.new(user_id: session[:current_userid], name: params[:name], address: params[:address], phone: params[:phone])
     @order.save!
     params[:items].each do |good_id, count|

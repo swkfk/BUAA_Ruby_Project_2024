@@ -40,6 +40,11 @@ class UsersController < ApplicationController
     raw_password = params[:password]
     re_password = params[:re_password]
 
+    if username.empty? or raw_password.empty? or re_password.empty?
+      redirect_to register_users_path, alert: "用户名、密码不能为空"
+      return
+    end
+
     if raw_password != re_password
       redirect_to register_users_path, alert: "密码不一致！"
       return
@@ -114,6 +119,7 @@ class UsersController < ApplicationController
 
   # POST /users or /users.json
   def create
+    return unless authenticate_user "Admin"
     @user = User.new(user_params)
 
     respond_to do |format|
@@ -129,6 +135,7 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
+    return unless authenticate_user && assert_current_user(@user.id)
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to @user, notice: "成功更新用户信息" }
