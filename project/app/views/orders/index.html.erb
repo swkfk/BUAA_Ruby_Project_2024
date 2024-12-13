@@ -17,7 +17,9 @@
 
   <div class="row">
     <%= link_to "返回商品总览", goods_path, class: "offset-2 col-3 btn btn-primary" %>
-    <%= link_to "新建订单", new_order_path, class: "offset-2 col-3 btn btn-primary" %>
+    <% if session[:current_role] == "Customer" %>
+      <%= link_to "新建订单", new_order_path, class: "offset-2 col-3 btn btn-primary" %>
+    <% end %>
   </div>
 
   <br />

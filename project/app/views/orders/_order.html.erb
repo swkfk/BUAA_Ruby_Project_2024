@@ -63,10 +63,12 @@
       ¥<%= total_price %>
     </p>
     <div class="row p-2">
-      <%= form_with url: order_path(order), method: "delete", class: "col-2 p-0" do |form| %>
-        <%= form.submit "删除订单", class: "form-control btn btn-danger" %>
+      <% if session[:current_role] == "Customer" %>
+        <%= form_with url: order_path(order), method: "delete", class: "col-2 p-0" do |form| %>
+          <%= form.submit "删除订单", class: "form-control btn btn-danger" %>
+        <% end %>
+        <%= link_to "编辑订单", edit_order_path(order), class: "col-2 btn btn-primary" %>
       <% end %>
-      <%= link_to "编辑订单", edit_order_path(order), class: "col-2 btn btn-primary" %>
     </div>
   </div>
 

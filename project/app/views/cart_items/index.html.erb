@@ -7,7 +7,7 @@
 
   <div id="cart_items">
     <% @cart_items.each do |cart_item| %>
-      <% unless CartItem.where(user_id: session[:current_userid]).empty? %>
+      <% if cart_item.user.id == session[:current_userid] %>
         <div class="card m-3 p-3">
           <%= render cart_item %>
         </div>
