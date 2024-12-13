@@ -71,6 +71,29 @@ class UsersController < ApplicationController
     redirect_to login_users_path, notice: "User #{username} registered successfully."
   end
 
+  def update_password
+    authenticate_user
+    old_password = params[:old_password]
+    raw_password = params[:password]
+    re_password = params[:re_password]
+
+    user = User.find(session[:current_userid])
+
+    if raw_password != re_password
+      redirect_to user, alert: "Password and re-password are not the same."
+      return
+    end
+
+    if user.password != helpers.hash_password(user.name, old_password)
+      redirect_to user, alert: "Password is wrong."
+      return
+    end
+
+    user.password = helpers.hash_password(user.name, raw_password)
+    user.save!
+    redirect_to user, notice: "Password updated successfully."
+  end
+
   # GET /users or /users.json
   def index
     @users = User.all
@@ -78,6 +101,7 @@ class UsersController < ApplicationController
 
   # GET /users/1 or /users/1.json
   def show
+    authenticate_user
   end
 
   # GET /users/new

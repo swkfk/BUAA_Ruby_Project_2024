@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       get "logout"
       get "register"
       post "do_register"
+      post "update_password"
     end
   end
 
