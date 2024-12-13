@@ -37,9 +37,29 @@ class OrdersController < ApplicationController
 
   # PATCH/PUT /orders/1 or /orders/1.json
   def update
+    params[:order].each do |good_id, count|
+      # It is terrible to use this way! But I have no time to fix it.
+      if good_id == "user_id" || good_id == "name" || good_id == "address" || good_id == "phone" || good_id.nil? || count.nil?
+        next
+      end
+      good_id = good_id.to_i
+      count = count.to_i
+
+      unless count <= 0
+        order_item = OrderItem.where(order_id: @order.id, good_id: good_id).first
+        if order_item.nil?
+          OrderItem.create!(order_id: @order.id, good_id: good_id, count: count)
+        elsif count == 0
+          order_item.destroy!
+        else
+          order_item.update(count: count)
+          order_item.save!
+        end
+      end
+    end
     respond_to do |format|
       if @order.update(order_params)
-        format.html { redirect_to @order, notice: "Order was successfully updated." }
+        format.html { redirect_to orders_path, notice: "Order was successfully updated." }
         format.json { render :show, status: :ok, location: @order }
       else
         format.html { render :edit, status: :unprocessable_entity }
