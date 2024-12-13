@@ -31,7 +31,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
             <li class="nav-item">
-              <a class="nav-link <%= current_page?(controller: 'goods') ? "active" : "" %>" href=<%= goods_path %>>商品总览</a>
+              <a class="nav-link <%= current_page?(controller: 'goods') || current_page?("/") ? "active" : "" %>" href=<%= goods_path %>>商品总览</a>
             </li>
             <% if %w[Customer].include? session[:current_role] %>
               <li class="nav-item">
