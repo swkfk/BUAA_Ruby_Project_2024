@@ -1,4 +1,4 @@
 class Comment < ApplicationRecord
   belongs_to :user
-  belongs_to :good
+  belongs_to :good, dependent: :destroy
 end
