@@ -35,10 +35,11 @@ class FavoriteItemsController < ApplicationController
   # DELETE /favorite_items/1 or /favorite_items/1.json
   def destroy
     return unless (authenticate_user "Customer") && (assert_current_user @favorite_item.user_id)
+    redirect_target = params[:redirect].to_i == 1 ? goods_path : favorite_items_path
     @favorite_item.destroy!
 
     respond_to do |format|
-      format.html { redirect_to goods_path, status: :see_other, notice: "Favorite item was successfully destroyed." }
+      format.html { redirect_to redirect_target, status: :see_other, notice: "Favorite item was successfully destroyed." }
       format.json { head :no_content }
     end
   end

@@ -29,18 +29,20 @@ class CartItemsController < ApplicationController
   def update
     return unless (authenticate_user "Customer") && (assert_current_user @cart_item.user_id)
 
+    redirect_target = params[:redirect].to_i == 1 ? goods_path : cart_items_path
+
     unless @cart_item.user_id == session[:current_userid]
-      redirect_to goods_path, notice: "You can only update your own cart items."
+      redirect_to redirect_target, notice: "You can only update your own cart items."
       return
     end
     if cart_item_params[:count].to_i < 1
       @cart_item.destroy!
-      redirect_to goods_path, notice: "Cart item was successfully destroyed."
+      redirect_to redirect_target, notice: "Cart item was successfully destroyed."
       return
     end
     respond_to do |format|
       if @cart_item.update(cart_item_params)
-        format.html { redirect_to goods_path, notice: "Cart item was successfully updated." }
+        format.html { redirect_to redirect_target, notice: "Cart item was successfully updated." }
         format.json { render :show, status: :ok, location: @cart_item }
       else
         format.html { render :edit, status: :unprocessable_entity }

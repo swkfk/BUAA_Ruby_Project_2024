@@ -54,7 +54,7 @@
         </button>
       <% end %>
     <% else %>
-      <%= form_with model: FavoriteItem, url: "/favorite_items/#{favorite_item.id}", method: "delete", class: "col-4" do %>
+      <%= form_with model: FavoriteItem, url: "/favorite_items/#{favorite_item.id}?redirect=1", method: "delete", class: "col-4" do %>
         <button type="submit" class="btn btn-outline-danger">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
@@ -81,7 +81,7 @@
         </div>
       <% end %>
     <% else %>
-      <%= form_with model: CartItem, url: "/cart_items/#{cart_item.id}", method: "put", class: "col-8" do |form| %>
+      <%= form_with model: CartItem, url: "/cart_items/#{cart_item.id}?redirect=1", method: "put", class: "col-8" do |form| %>
         <div class="row">
           <%= form.number_field :good_id, value: good.id, hidden: true %>
           <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>

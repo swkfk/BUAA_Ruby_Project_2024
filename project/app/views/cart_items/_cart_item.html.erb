@@ -44,7 +44,7 @@
   </div>
 
   <div class="row">
-    <%= form_with model: CartItem, url: "/cart_items/#{cart_item.id}", method: "put", class: "col-4" do |form| %>
+    <%= form_with model: CartItem, url: "/cart_items/#{cart_item.id}?redirect=2", method: "put", class: "col-4" do |form| %>
       <div class="row">
         <%= form.number_field :good_id, value: good.id, hidden: true %>
         <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
