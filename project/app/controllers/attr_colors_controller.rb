@@ -9,7 +9,7 @@ class AttrColorsController < ApplicationController
 
     respond_to do |format|
       if @attr_color.save
-        format.html { redirect_to admin_path, notice: "Attr color was successfully created." }
+        format.html { redirect_to admin_path, notice: "成功创建了一个商品色彩标签" }
         format.json { render :show, status: :created, location: @attr_color }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,7 +39,7 @@ class AttrColorsController < ApplicationController
     @attr_color.destroy!
 
     respond_to do |format|
-      format.html { redirect_to admin_path, status: :see_other, notice: "Attr color was successfully destroyed." }
+      format.html { redirect_to admin_path, status: :see_other, notice: "成功删除了一个商品色彩标签" }
       format.json { head :no_content }
     end
   end

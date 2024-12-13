@@ -6,14 +6,14 @@ class CommentsController < ApplicationController
     return unless authenticate_user "Customer"
 
     unless comment_params[:user_id] == session[:current_userid].to_s
-      redirect_to goods_path, notice: "You can't create a comment for another user"
+      redirect_to goods_path, notice: "你不能使用其他用户的 ID 发表评论，你在做什么？"
       return
     end
     @comment = Comment.new(comment_params)
 
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to goods_path, notice: "Comment was successfully created." }
+        format.html { redirect_to goods_path, notice: "成功发表评论" }
         format.json { render :show, status: :created, location: @comment }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -28,7 +28,7 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.update(comment_params)
-        format.html { redirect_to goods_path, notice: "Comment was successfully updated." }
+        format.html { redirect_to goods_path, notice: "成功更新评论" }
         format.json { render :show, status: :ok, location: @comment }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -44,7 +44,7 @@ class CommentsController < ApplicationController
     @comment.destroy!
 
     respond_to do |format|
-      format.html { redirect_to goods_path, status: :see_other, notice: "Comment was successfully destroyed." }
+      format.html { redirect_to goods_path, status: :see_other, notice: "成功删除评论" }
       format.json { head :no_content }
     end
   end

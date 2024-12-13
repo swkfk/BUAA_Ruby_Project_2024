@@ -23,7 +23,7 @@ class FavoriteItemsController < ApplicationController
 
     respond_to do |format|
       if @favorite_item.save
-        format.html { redirect_to goods_path, notice: "Favorite item was successfully created." }
+        format.html { redirect_to goods_path, notice: "添加收藏成功" }
         format.json { render :show, status: :created, location: @favorite_item }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,7 +39,7 @@ class FavoriteItemsController < ApplicationController
     @favorite_item.destroy!
 
     respond_to do |format|
-      format.html { redirect_to redirect_target, status: :see_other, notice: "Favorite item was successfully destroyed." }
+      format.html { redirect_to redirect_target, status: :see_other, notice: "取消收藏成功" }
       format.json { head :no_content }
     end
   end

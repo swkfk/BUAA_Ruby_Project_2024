@@ -38,7 +38,7 @@ class GoodsController < ApplicationController
 
     respond_to do |format|
       if @good.save
-        format.html { redirect_to @good, notice: "Good was successfully created." }
+        format.html { redirect_to @good, notice: "成功创建商品" }
         format.json { render :show, status: :created, location: @good }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -52,7 +52,7 @@ class GoodsController < ApplicationController
     return unless authenticate_user "Merchant", "Admin"
     respond_to do |format|
       if @good.update(good_params)
-        format.html { redirect_to @good, notice: "Good was successfully updated." }
+        format.html { redirect_to @good, notice: "成功修改商品信息" }
         format.json { render :show, status: :ok, location: @good }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -86,7 +86,7 @@ class GoodsController < ApplicationController
     params[:attr_color_ids].each do |color_id|
       GoodColorRelation.create(good_id: @good.id, attr_color_id: color_id).save
     end
-    redirect_to good_path(@good)
+    redirect_to good_path(@good), notice: "成功修改商品属性"
   end
 
   # DELETE /goods/1 or /goods/1.json
@@ -95,7 +95,7 @@ class GoodsController < ApplicationController
     @good.destroy!
 
     respond_to do |format|
-      format.html { redirect_to goods_path, status: :see_other, notice: "Good was successfully destroyed." }
+      format.html { redirect_to goods_path, status: :see_other, notice: "成功删除商品" }
       format.json { head :no_content }
     end
   end

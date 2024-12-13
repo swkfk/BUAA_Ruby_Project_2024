@@ -16,7 +16,7 @@ class CartItemsController < ApplicationController
 
     respond_to do |format|
       if @cart_item.save
-        format.html { redirect_to goods_path, notice: "Cart item was successfully created." }
+        format.html { redirect_to goods_path, notice: "成功创建了一个购物车项" }
         format.json { render :show, status: :created, location: @cart_item }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -32,17 +32,17 @@ class CartItemsController < ApplicationController
     redirect_target = params[:redirect].to_i == 1 ? goods_path : cart_items_path
 
     unless @cart_item.user_id == session[:current_userid]
-      redirect_to redirect_target, notice: "You can only update your own cart items."
+      redirect_to redirect_target, notice: "你只能修改属于自己的购物车项，你在做什么？"
       return
     end
     if cart_item_params[:count].to_i < 1
       @cart_item.destroy!
-      redirect_to redirect_target, notice: "Cart item was successfully destroyed."
+      redirect_to redirect_target, notice: "已删除该购物车项"
       return
     end
     respond_to do |format|
       if @cart_item.update(cart_item_params)
-        format.html { redirect_to redirect_target, notice: "Cart item was successfully updated." }
+        format.html { redirect_to redirect_target, notice: "成功更新了购买数量" }
         format.json { render :show, status: :ok, location: @cart_item }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -58,7 +58,7 @@ class CartItemsController < ApplicationController
     @cart_item.destroy!
 
     respond_to do |format|
-      format.html { redirect_to cart_items_path, status: :see_other, notice: "Cart item was successfully destroyed." }
+      format.html { redirect_to cart_items_path, status: :see_other, notice: "成功移除了该购买内容" }
       format.json { head :no_content }
     end
   end

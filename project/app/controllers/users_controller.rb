@@ -22,14 +22,14 @@ class UsersController < ApplicationController
         redirect_to goods_url
       end
     else
-      redirect_to login_users_path, alert: "Invalid user name or password or wrong role."
+      redirect_to login_users_path, alert: "用户名、密码或者用户角色错误"
     end
   end
 
   def logout
     session.delete(:current_userid)
     session.delete(:current_role)
-    redirect_to login_users_path, notice: "Logged out successfully"
+    redirect_to login_users_path, notice: "成功退出登录"
   end
 
   def register
@@ -41,12 +41,12 @@ class UsersController < ApplicationController
     re_password = params[:re_password]
 
     if raw_password != re_password
-      redirect_to register_users_path, alert: "Password and re-password are not the same."
+      redirect_to register_users_path, alert: "密码不一致！"
       return
     end
 
     unless User.find_by(name: username).nil?
-      redirect_to register_users_path, alert: "User name already exists."
+      redirect_to register_users_path, alert: "用户名已存在"
       return
     end
 
@@ -54,7 +54,7 @@ class UsersController < ApplicationController
     role = params[:user_type]
 
     if role == "Admin" or UserRole.find_by(name: role).nil?
-      redirect_to register_users_path, alert: "Role #{role} does not exist or not permitted."
+      redirect_to register_users_path, alert: "角色 #{role} 不存在或不允许注册"
       return
     end
 
@@ -63,7 +63,7 @@ class UsersController < ApplicationController
 
     user.save!
 
-    redirect_to login_users_path, notice: "User #{username} registered successfully."
+    redirect_to login_users_path, notice: "成功注册，欢迎来到 Ruby Mailer， #{username}！"
   end
 
   def update_password
@@ -95,7 +95,7 @@ class UsersController < ApplicationController
     password = params[:password]
     user.password = helpers.hash_password(user.name, password)
     user.save!
-    redirect_to user, notice: "Password reset successfully."
+    redirect_to user, notice: "成功重置用户 #{user.name} 的密码"
   end
 
   # GET /users/1 or /users/1.json
@@ -131,7 +131,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: "User was successfully updated." }
+        format.html { redirect_to @user, notice: "成功更新用户信息" }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit, status: :unprocessable_entity }
