@@ -6,9 +6,11 @@
   <h1 class="text-center">收藏夹</h1>
   <div id="favorite_items">
     <% @favorite_items.each do |favorite_item| %>
-      <div class="card m-3 p-4">
-        <%= render favorite_item %>
-      </div>
+      <% if session[:current_userid] == favorite_item.user_id %>
+        <div class="card m-3 p-4">
+          <%= render favorite_item %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 

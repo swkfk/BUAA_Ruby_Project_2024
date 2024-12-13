@@ -8,7 +8,9 @@
 
   <div id="orders">
     <% @orders.each do |order| %>
-      <%= render order %>
+      <% if (%w[Merchant].include? session[:current_role]) || (@current_user.id == order.user_id) %>
+        <%= render order %>
+      <% end %>
       <br />
     <% end %>
   </div>
