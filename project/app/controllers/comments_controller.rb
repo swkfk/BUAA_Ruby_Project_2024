@@ -3,7 +3,8 @@ class CommentsController < ApplicationController
 
   # GET /comments or /comments.json
   def index
-    authenticate_user "Customer"
+    return unless authenticate_user "Customer"
+
     @comments = Comment.all
   end
 
@@ -22,7 +23,8 @@ class CommentsController < ApplicationController
 
   # POST /comments or /comments.json
   def create
-    authenticate_user "Customer"
+    return unless authenticate_user "Customer"
+
     unless comment_params[:user_id] == session[:current_userid].to_s
       redirect_to goods_path, notice: "You can't create a comment for another user"
       return
@@ -42,6 +44,8 @@ class CommentsController < ApplicationController
 
   # PATCH/PUT /comments/1 or /comments/1.json
   def update
+    return unless (authenticate_user "Admin", "Customer") && (assert_current_user @comment.user_id, "Admin")
+
     respond_to do |format|
       if @comment.update(comment_params)
         format.html { redirect_to @comment, notice: "Comment was successfully updated." }
@@ -55,10 +59,12 @@ class CommentsController < ApplicationController
 
   # DELETE /comments/1 or /comments/1.json
   def destroy
+    return unless (authenticate_user "Admin", "Customer") && (assert_current_user @comment.user_id, "Admin")
+
     @comment.destroy!
 
     respond_to do |format|
-      format.html { redirect_to comments_path, status: :see_other, notice: "Comment was successfully destroyed." }
+      format.html { redirect_to goods_path, status: :see_other, notice: "Comment was successfully destroyed." }
       format.json { head :no_content }
     end
   end

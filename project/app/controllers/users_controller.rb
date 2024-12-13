@@ -54,25 +54,20 @@ class UsersController < ApplicationController
     role = params[:user_type]
 
     if role == "Admin" or UserRole.find_by(name: role).nil?
-      puts ">>>>>> Role #{role} does not exist or not permitted."
       redirect_to register_users_path, alert: "Role #{role} does not exist or not permitted."
       return
     end
 
-    puts ">>>>>> Registering user #{username} with role #{role} and email #{email}."
-
     user = User.create(name: username, password: helpers.hash_password(username, raw_password), email: email)
     user.user_roles << UserRole.find_by(name: role)
 
-    puts ">>>>>> User #{user.name} created with id #{user.id}."
     user.save!
-    puts ">>>>>> User #{user.name} saved."
 
     redirect_to login_users_path, notice: "User #{username} registered successfully."
   end
 
   def update_password
-    authenticate_user
+    return unless authenticate_user
     old_password = params[:old_password]
     raw_password = params[:password]
     re_password = params[:re_password]

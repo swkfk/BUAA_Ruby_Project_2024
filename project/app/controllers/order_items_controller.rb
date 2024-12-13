@@ -3,6 +3,7 @@ class OrderItemsController < ApplicationController
 
   # GET /order_items or /order_items.json
   def index
+    return unless authenticate_user "Customer"
     @order_items = OrderItem.all
   end
 
@@ -21,6 +22,7 @@ class OrderItemsController < ApplicationController
 
   # POST /order_items or /order_items.json
   def create
+    return unless authenticate_user "Customer"
     @order_item = OrderItem.new(order_item_params)
 
     respond_to do |format|
@@ -36,6 +38,7 @@ class OrderItemsController < ApplicationController
 
   # PATCH/PUT /order_items/1 or /order_items/1.json
   def update
+    return unless (authenticate_user "Customer") && (assert_current_user @order_item.order.user_id)
     respond_to do |format|
       if @order_item.update(order_item_params)
         format.html { redirect_to @order_item, notice: "Order item was successfully updated." }
@@ -49,6 +52,7 @@ class OrderItemsController < ApplicationController
 
   # DELETE /order_items/1 or /order_items/1.json
   def destroy
+    return unless (authenticate_user "Customer") && (assert_current_user @order_item.order.user_id)
     @order_item.destroy!
 
     respond_to do |format|

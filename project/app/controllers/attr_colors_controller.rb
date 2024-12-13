@@ -21,6 +21,8 @@ class AttrColorsController < ApplicationController
 
   # POST /attr_colors or /attr_colors.json
   def create
+    return unless authenticate_user "Admin"
+
     @attr_color = AttrColor.new(attr_color_params)
 
     respond_to do |format|
@@ -36,6 +38,8 @@ class AttrColorsController < ApplicationController
 
   # PATCH/PUT /attr_colors/1 or /attr_colors/1.json
   def update
+    return unless authenticate_user "Admin"
+
     respond_to do |format|
       if @attr_color.update(attr_color_params)
         format.html { redirect_to @attr_color, notice: "Attr color was successfully updated." }
@@ -49,6 +53,7 @@ class AttrColorsController < ApplicationController
 
   # DELETE /attr_colors/1 or /attr_colors/1.json
   def destroy
+    return unless authenticate_user "Admin"
     @attr_color.destroy!
 
     respond_to do |format|

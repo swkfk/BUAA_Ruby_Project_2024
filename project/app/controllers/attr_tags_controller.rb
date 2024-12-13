@@ -20,7 +20,7 @@ class AttrTagsController < ApplicationController
   end
 
   def create
-    authenticate_user "Admin"
+    return unless authenticate_user "Admin"
     @attr_tag = AttrTag.new(attr_tag_params)
 
     respond_to do |format|
@@ -36,6 +36,7 @@ class AttrTagsController < ApplicationController
 
   # PATCH/PUT /attr_tags/1 or /attr_tags/1.json
   def update
+    return unless authenticate_user "Admin"
     respond_to do |format|
       if @attr_tag.update(attr_tag_params)
         format.html { redirect_to @attr_tag, notice: "Attr tag was successfully updated." }
@@ -49,6 +50,7 @@ class AttrTagsController < ApplicationController
 
   # DELETE /attr_tags/1 or /attr_tags/1.json
   def destroy
+    return unless authenticate_user "Admin"
     @attr_tag.destroy!
 
     respond_to do |format|

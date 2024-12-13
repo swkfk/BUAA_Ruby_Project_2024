@@ -3,7 +3,8 @@ class CartItemsController < ApplicationController
 
   # GET /cart_items or /cart_items.json
   def index
-    authenticate_user "Customer"
+    return unless authenticate_user "Customer"
+
     @cart_items = CartItem.all
   end
 
@@ -22,6 +23,8 @@ class CartItemsController < ApplicationController
 
   # POST /cart_items or /cart_items.json
   def create
+    return unless authenticate_user "Customer"
+
     @cart_item = CartItem.new(cart_item_params)
 
     respond_to do |format|
@@ -37,7 +40,8 @@ class CartItemsController < ApplicationController
 
   # PATCH/PUT /cart_items/1 or /cart_items/1.json
   def update
-    authenticate_user "Customer"
+    return unless (authenticate_user "Customer") && (assert_current_user @cart_item.user_id)
+
     unless @cart_item.user_id == session[:current_userid]
       redirect_to goods_path, notice: "You can only update your own cart items."
       return
@@ -60,6 +64,8 @@ class CartItemsController < ApplicationController
 
   # DELETE /cart_items/1 or /cart_items/1.json
   def destroy
+    return unless (authenticate_user "Customer") && (assert_current_user @cart_item.user_id)
+
     @cart_item.destroy!
 
     respond_to do |format|

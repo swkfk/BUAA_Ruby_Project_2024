@@ -21,6 +21,7 @@ class UserRolesController < ApplicationController
 
   # POST /user_roles or /user_roles.json
   def create
+    return unless authenticate_user "Admin"
     @user_role = UserRole.new(user_role_params)
 
     respond_to do |format|
@@ -36,6 +37,7 @@ class UserRolesController < ApplicationController
 
   # PATCH/PUT /user_roles/1 or /user_roles/1.json
   def update
+    return unless authenticate_user "Admin"
     respond_to do |format|
       if @user_role.update(user_role_params)
         format.html { redirect_to @user_role, notice: "User role was successfully updated." }
@@ -49,6 +51,7 @@ class UserRolesController < ApplicationController
 
   # DELETE /user_roles/1 or /user_roles/1.json
   def destroy
+    return unless authenticate_user "Admin"
     @user_role.destroy!
 
     respond_to do |format|

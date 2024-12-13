@@ -3,7 +3,7 @@ class FavoriteItemsController < ApplicationController
 
   # GET /favorite_items or /favorite_items.json
   def index
-    authenticate_user "Customer"
+    return unless authenticate_user "Customer"
     @favorite_items = FavoriteItem.all
   end
 
@@ -22,6 +22,7 @@ class FavoriteItemsController < ApplicationController
 
   # POST /favorite_items or /favorite_items.json
   def create
+    return unless authenticate_user "Customer"
     @favorite_item = FavoriteItem.new(favorite_item_params)
 
     respond_to do |format|
@@ -37,6 +38,7 @@ class FavoriteItemsController < ApplicationController
 
   # PATCH/PUT /favorite_items/1 or /favorite_items/1.json
   def update
+    return unless (authenticate_user "Customer") && (assert_current_user @favorite_item.user_id)
     respond_to do |format|
       if @favorite_item.update(favorite_item_params)
         format.html { redirect_to @favorite_item, notice: "Favorite item was successfully updated." }
@@ -50,6 +52,7 @@ class FavoriteItemsController < ApplicationController
 
   # DELETE /favorite_items/1 or /favorite_items/1.json
   def destroy
+    return unless (authenticate_user "Customer") && (assert_current_user @favorite_item.user_id)
     @favorite_item.destroy!
 
     respond_to do |format|

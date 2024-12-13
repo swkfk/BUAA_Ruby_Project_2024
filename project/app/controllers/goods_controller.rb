@@ -3,7 +3,7 @@ class GoodsController < ApplicationController
 
   # GET /goods or /goods.json
   def index
-    authenticate_user "Visitor"
+    return unless authenticate_user "Visitor"
     @goods = Good.all
   end
 
@@ -14,7 +14,7 @@ class GoodsController < ApplicationController
 
   # GET /goods/new
   def new
-    authenticate_user "Merchant", "Admin"
+    return unless authenticate_user "Merchant", "Admin"
 
     @good = Good.new
   end
@@ -26,6 +26,7 @@ class GoodsController < ApplicationController
 
   # POST /goods or /goods.json
   def create
+    return unless authenticate_user "Merchant", "Admin"
     @good = Good.create(name: good_params[:name], price: good_params[:price], description: good_params[:description])
 
     good_params[:image_ids].each do |image_id|
@@ -48,6 +49,7 @@ class GoodsController < ApplicationController
 
   # PATCH/PUT /goods/1 or /goods/1.json
   def update
+    return unless authenticate_user "Merchant", "Admin"
     respond_to do |format|
       if @good.update(good_params)
         format.html { redirect_to @good, notice: "Good was successfully updated." }
@@ -60,6 +62,7 @@ class GoodsController < ApplicationController
   end
 
   def edit_good_attribute
+    return unless authenticate_user "Merchant", "Admin"
     authenticate_user "Admin", "Merchant"
     @good = Good.find(params[:id])
     if @good.nil?
@@ -73,6 +76,7 @@ class GoodsController < ApplicationController
   end
 
   def do_edit_good_attribute
+    return unless authenticate_user "Merchant", "Admin"
     @good = Good.find(params[:id])
     GoodTagRelation.destroy_by(good_id: @good.id)
     GoodColorRelation.destroy_by(good_id: @good.id)
@@ -87,6 +91,7 @@ class GoodsController < ApplicationController
 
   # DELETE /goods/1 or /goods/1.json
   def destroy
+    return unless authenticate_user "Merchant", "Admin"
     @good.destroy!
 
     respond_to do |format|

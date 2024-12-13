@@ -37,6 +37,7 @@ class OrdersController < ApplicationController
 
   # PATCH/PUT /orders/1 or /orders/1.json
   def update
+    return unless (authenticate_user "Customer") && (assert_current_user @order.user_id)
     params[:order].each do |good_id, count|
       # It is terrible to use this way! But I have no time to fix it.
       if good_id == "user_id" || good_id == "name" || good_id == "address" || good_id == "phone" || good_id.nil? || count.nil?
@@ -70,6 +71,7 @@ class OrdersController < ApplicationController
 
   # DELETE /orders/1 or /orders/1.json
   def destroy
+    return unless (authenticate_user "Customer") && (assert_current_user @order.user_id)
     @order.destroy!
 
     respond_to do |format|
