@@ -32,7 +32,7 @@
 
   <div class="row">
     <% GoodTagRelation.where(good_id: good.id).map { |relation| AttrTag.where(id: relation.attr_tag_id).first }.each do |tag| %>
-      <span class="badge bg-primary fs-6 col-1 m-1"><%= tag.name %></span>
+      <span class="badge bg-primary fs-6 col-2 m-1"><%= tag.name %></span>
     <% end %>
   </div>
 
