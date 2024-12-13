@@ -31,7 +31,7 @@
       <% self_image = Image.where(user_id: session[:current_userid]) %>
       <% exist_image = good.images.to_a %>
       <div class="row">
-        <%= form.collection_check_boxes :image_ids, self_image.to_a + exist_image, :id, :title do |b| %>
+        <%= form.collection_check_boxes :image_ids, (self_image.to_a + exist_image).uniq, :id, :title do |b| %>
           <div class="checkbox col-3">
             <%= b.check_box %>
             <%= b.label class: "text-capitalize" %>
