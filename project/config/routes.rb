@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       get "register"
       post "do_register"
       post "update_password"
+      post "reset_password"
     end
   end
 

@@ -94,6 +94,15 @@ class UsersController < ApplicationController
     redirect_to user, notice: "Password updated successfully."
   end
 
+  def reset_password
+    authenticate_user "Admin"
+    user = User.find(params[:id])
+    password = params[:password]
+    user.password = helpers.hash_password(user.name, password)
+    user.save!
+    redirect_to user, notice: "Password reset successfully."
+  end
+
   # GET /users or /users.json
   def index
     @users = User.all
