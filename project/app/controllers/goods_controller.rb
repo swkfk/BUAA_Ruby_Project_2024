@@ -30,7 +30,7 @@ class GoodsController < ApplicationController
     @good = Good.create(name: good_params[:name], price: good_params[:price], description: good_params[:description])
 
     good_params[:image_ids].each do |image_id|
-      image = Image.first(image_id.to_i)
+      image = Image.where(id: image_id.to_i).first
       unless image.nil?
         @good.images << image
       end
