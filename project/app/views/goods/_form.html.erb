@@ -1,0 +1,47 @@
+<div class="card-body">
+  <%= form_with(model: good) do |form| %>
+    <% if good.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(good.errors.count, "error") %> prohibited this good from being saved:</h2>
+
+        <ul>
+          <% good.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="mb-3">
+      <%= form.label "商品名称", class: "form-label" %>
+      <%= form.text_field :name, class: "form-control", placeholder: "请输入商品名称" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :price, "价格", style: "display: block" %>
+      <%= form.number_field :price, class: "form-control", step: '0.01', in: 0.01..99999.99 %>
+    </div>
+  
+    <div class="mb-3">
+      <%= form.label :description, "描述", style: "display: block" %>
+      <%= form.text_area :description, class: "form-control", placeholder: "请输入商品描述" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :description, "选择商品图片", style: "display: block" %>
+      <% self_image = Image.where(user_id: session[:current_userid]) %>
+      <% exist_image = good.images.to_a %>
+      <div class="row">
+        <%= form.collection_check_boxes :image_ids, (self_image.to_a + exist_image).uniq, :id, :title do |b| %>
+          <div class="checkbox col-3">
+            <%= b.check_box %>
+            <%= b.label class: "text-capitalize" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <%= form.submit "保存商品", class: "form-control btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

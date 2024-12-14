@@ -1,0 +1,13 @@
+<% content_for :title, "编辑订单 - Ruby Mailer" %>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header text-center fs-3">
+      编辑订单信息
+    </div>
+    <%= render "form", order: @order %>
+    <div>
+      <p class="text-center"><%= link_to "返回订单总览", orders_path %></p>
+    </div>
+  </div>
+</div>

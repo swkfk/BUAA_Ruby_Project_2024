@@ -1,0 +1,18 @@
+<% content_for :title, "收藏夹 - Ruby Mailer" %>
+
+<div class="container">
+  <h1 class="text-center">收藏夹</h1>
+  <div id="favorite_items">
+    <% @favorite_items.each do |favorite_item| %>
+      <% if session[:current_userid] == favorite_item.user_id %>
+        <div class="card m-3 p-4">
+          <%= render favorite_item %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="row m-3">
+    <%= link_to "返回商品总览", goods_path, class: "offset-5 col-2 btn btn-primary" %>
+  </div>
+</div>

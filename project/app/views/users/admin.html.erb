@@ -1,0 +1,149 @@
+<% content_for :title, "管理后台 - Ruby Mailer" %>
+
+<h1 class="text-center">Ruby Mailer 管理后台</h1>
+
+<hr />
+
+<div class="container">
+
+  <div class="card p-4 mb-3">
+    <h2>商品标签管理</h2>
+    <div class="row">
+      <% AttrTag.all.each do |tag| %>
+        <div class="col-3 m-1 row">
+          <div class="col-6 badge bg-primary fs-6 my-auto"><%= tag.name %></div>
+          <div class="col-4">
+            <%= form_with url: attr_tag_path(tag), method: "delete" do |form| %>
+              <%= form.submit "（删除）", class: "btn text-danger fake-link" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <% attr_tag = AttrTag.new %>
+      <%= form_with model: attr_tag, class: "m-1" do |form| %>
+        <div class="row">
+          <div class="col-3">
+            <%= form.text_field :name, class: "form-control", placeholder: "标签名称" %>
+          </div>
+          <div class="col-1">
+            <%= form.submit "（添加）", class: "btn text-success fake-link" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card p-4 mb-3">
+    <h2>商品颜色管理</h2>
+    <div class="row">
+      <% AttrColor.all.each do |color| %>
+        <div class="col-3 m-1 row">
+          <div class="col-6 my-auto">
+            <span class="color-circle" style="background-color: <%= color.rgb %>;"></span> <%= color.name %>
+          </div>
+          <div class="col-4">
+            <%= form_with url: attr_color_path(color), method: "delete" do |form| %>
+              <%= form.submit "（删除）", class: "btn text-danger fake-link" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <% attr_color = AttrColor.new %>
+    <%= form_with model: attr_color, class: "m-1" do |form| %>
+      <div class="row">
+        <div class="col-3">
+          <div class="row">
+            <div class="col-4 my-auto">
+              <%= form.color_field :rgb,
+                                   id: "rgb_field",
+                                   class: "form-control",
+                                   onchange: "document.getElementById('rgb_hex').value = this.value" %>
+            </div>
+            <div class="col-8">
+              <%= form.text_field :rgb,
+                                  id: "rgb_hex",
+                                  value: "#000000",
+                                  class: "form-control",
+                                  readonly: true %>
+            </div>
+            <div class="col-12">
+              <%= form.text_field :name, class: "form-control", placeholder: "颜色名称" %>
+            </div>
+          </div>
+        </div>
+        <div class="col-1 my-auto">
+          <%= form.submit "（添加）", class: "btn text-success fake-link my-auto" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="card p-4 mb-3">
+    <h2>用户管理</h2>
+    <div class="row fw-bold mt-3 text-center">
+      <div class="col-1 my-auto">
+        用户 ID
+      </div>
+      <div class="col-2 my-auto">
+        用户名
+      </div>
+      <div class="col-3 my-auto">
+        邮箱
+      </div>
+      <div class="col-2 my-auto">
+        用户角色
+      </div>
+      <div class="col-3 my-auto">
+        重置密码
+      </div>
+    </div>
+    <% User.all.each do |user| %>
+      <div class="row text-center">
+        <div class="col-1 my-auto">
+          <%= user.id %>
+        </div>
+        <div class="col-2 my-auto">
+          <%= user.name %>
+        </div>
+        <div class="col-3 my-auto">
+          <%= user.email %>
+        </div>
+        <div class="col-2 my-auto">
+          <% UserRoleRelation.where(user_id: user.id).each do |role| %>
+            <span><%= role.user_role.name %></span>
+          <% end %>
+        </div>
+        <div class="col-4 my-auto">
+          <%= form_with url: reset_password_users_path, method: "post" do |form| %>
+            <%= form.hidden_field :id, value: user.id %>
+            <%= form.text_field :password, value: rand_password %>
+            <%= form.submit "重置密码", class: "btn text-success fake-link my-auto" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+</div>
+
+
+<style>
+  .fake-link:hover {
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .color-circle {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-left: 10px;
+    margin-bottom: 4px;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+  }
+</style>

@@ -1,0 +1,31 @@
+<div id="<%= dom_id user %>">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title">用户信息</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-9">
+          <p class="card-text">
+            <span class="fw-bold">用户名：</span>
+            <span><%= user.name %></span>
+          </p>
+          <p class="card-text">
+            <span class="fw-bold">邮箱：</span>
+            <span><%= user.email %></span>
+          </p>
+          <p class="card-text">
+            <span class="fw-bold">角色：</span>
+            <% UserRoleRelation.where(user_id: user.id).each do |role| %>
+              <span><%= role.user_role.name %></span>
+            <% end %>
+          </p>
+          <p class="card-text">
+            <span class="fw-bold">注册时间：</span>
+            <span><%= user.created_at.localtime.strftime "%Y-%m-%d %H:%M:%S" %></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

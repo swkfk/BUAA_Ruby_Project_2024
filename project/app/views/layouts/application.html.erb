@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Ruby Mailer" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <style>
+      .dropdown:hover .dropdown-menu {
+          display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+  <header>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+      <div class="container-fluid">
+        <a class="navbar-brand" href=<%= goods_path %>>Ruby Mailer</a>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <li class="nav-item">
+              <a class="nav-link <%= current_page?(controller: 'goods') || current_page?("/") ? "active" : "" %>" href=<%= goods_path %>>商品总览</a>
+            </li>
+            <% if %w[Customer].include? session[:current_role] %>
+              <li class="nav-item">
+                <a class="nav-link <%= current_page?(controller: 'cart_items') ? "active" : "" %>" href=<%= cart_items_path %>>购物车</a>
+              </li>
+            <% end %>
+            <% if %w[Customer].include? session[:current_role] %>
+              <li class="nav-item">
+                <a class="nav-link <%= current_page?(controller: 'favorite_items') ? "active" : "" %>" href=<%= favorite_items_path %>>收藏夹</a>
+              </li>
+            <% end %>
+            <% if %w[Customer Merchant].include? session[:current_role] %>
+              <li class="nav-item">
+                <a class="nav-link <%= current_page?(controller: 'orders') ? "active" : "" %>" href=<%= orders_path %>>订单</a>
+              </li>
+            <% end %>
+            <% if %w[Admin].include? session[:current_role] %>
+              <li class="nav-item">
+                <a class="nav-link <%= current_page?('/admin') ? "active" : "" %>" href=<%= admin_path %>>管理后台</a>
+              </li>
+            <% end %>
+            <% if session[:current_userid] %>
+              <li class="nav-item">
+                <a class="nav-link <%= current_page?(controller: 'images') ? "active" : "" %>" href=<%= images_path %>>图床</a>
+              </li>
+            <% end %>
+          </ul>
+          <ul class="navbar-nav navbar-right">
+            <% if @current_user.nil? %>
+              <li class="nav-item">
+                <a class="nav-link active" href=<%= login_users_path %>>登录</a>
+              </li>
+              <li class="nav-item">
+                <div class="nav-link active">|</div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href=<%= register_users_path %>>注册</a>
+              </li>
+            <% else %>
+              <li class="nav-item">
+                <a class="nav-link active" href="#"></a>
+              </li>
+              <li class="nav-item dropdown">
+              <div
+                class="nav-link dropdown-toggle"
+                data-toggle="dropdown">
+                欢迎回来，<b><%=  @current_user.name  %></b>！
+              </div>
+
+              <ul class="dropdown-menu" role="menu">
+                <li><a class="nav-link text-black center" href="<%=  user_path @current_user  %>">个人中心</a></li>
+                <li><a class="nav-link text-black center" href="<%=  logout_users_path  %>">退出登录</a></li>
+              </ul>
+            </li>
+            <%  end %>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <% if notice %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="notice">
+      <%= notice %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="document.getElementById('notice').remove();"></button>
+    </div>
+  <% end %>
+
+  <% if alert %>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert">
+      <%= alert %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="document.getElementById('alert').remove();"></button>
+    </div>
+  <% end %>
+
+  <%= yield %>
+  </body>
+</html>

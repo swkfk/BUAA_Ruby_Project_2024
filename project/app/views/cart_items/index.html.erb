@@ -1,0 +1,19 @@
+<% content_for :title, "购物车 - Ruby Mailer" %>
+
+<div class="container">
+  <h1 class="text-center">购物车</h1>
+
+  <div id="cart_items">
+    <% @cart_items.each do |cart_item| %>
+      <% if cart_item.user.id == session[:current_userid] %>
+        <div class="card m-3 p-3">
+          <%= render cart_item %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="row m-3">
+    <%= link_to "返回商品总览", goods_path, class: "offset-5 col-2 btn btn-primary" %>
+  </div>
+</div>

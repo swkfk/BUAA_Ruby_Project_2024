@@ -1,0 +1,65 @@
+<%= form_with(model: order) do |form| %>
+  <% if order.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(order.errors.count, "error") %> prohibited this order from being saved:</h2>
+
+      <ul>
+        <% order.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="card-body">
+    <%= form.number_field :user_id, value: session[:current_userid], hidden: true %>
+    <div class="mb-3">
+      <%= form.label "收货人姓名", class: "form-label" %>
+      <%= form.text_field :name, class: "form-control", placeholder: "输入姓名（必填）" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label "收货地址", class: "form-label" %>
+      <%= form.text_field :address, class: "form-control", placeholder: "输入地址" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label "联系电话", class: "form-label" %>
+      <%= form.text_field :phone, class: "form-control", placeholder: "输入电话" %>
+    </div>
+
+    <hr />
+
+    <div class="mb-3">
+      <%= form.label "选择商品", class: "form-label fw-bold fs-3" %>
+    </div>
+
+    <% Good.all.each do |good| %>
+      <div class="row">
+        <span class="col-4 my-auto"><%= good.name %></span>
+        <span class="col-2 my-auto">¥<%= good.price %></span>
+        <span class="col-2 my-auto text-danger fw-bold">
+          <% if FavoriteItem.exists?(user_id: session[:current_userid], good_id: good.id) %>
+            已收藏
+          <% end %>
+        </span>
+        <span class="col-2 offset-2">
+          <% item = OrderItem.where(order_id: order.id, good_id: good.id).first %>
+          <%=
+            form.number_field "#{good.id}",
+                              in: 0..999,
+                              value: item.nil? || item.count.nil? ? 0 : item.count,
+                              class: "form-control"
+          %>
+        </span>
+
+      </div>
+    <% end %>
+
+    <hr />
+
+    <div class="d-grid">
+      <%= form.submit "更新订单", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>
