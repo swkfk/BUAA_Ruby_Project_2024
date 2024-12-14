@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Blog4" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+    <div id="banner">
+      <h1>My Blog IV</h1>
+    </div>
+    <div id="left-panel">
+      <div id="menu">
+        <% if current_user %>
+          <p>Hi, <%= current_user.username %></p>
+        <% end %>
+        <ul>
+          <li><%= link_to "Blogs", blogs_path %></li>
+          <% if current_user %>
+            <li><%= link_to('Logout', destroy_user_session_path,  data: { turbo_method: :delete }) %></li>
+          <% else %>
+            <li><%= link_to('Sign Up', new_user_registration_path) %></li>
+            <li><%= link_to('Sign In', new_user_session_path) %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+    <div id="main-panel">
+      <%= yield %>
+    </div>
+    <div id="footer">
+      Copyright <strong>swkfk</strong> &copy; 2024, For <strong>BUAA Ruby Course</strong>.
+    </div>
+  </body>
+</html>

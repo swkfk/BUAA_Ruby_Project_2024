@@ -1,0 +1,13 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Blogs" %>
+
+<div id="blogs">
+  <% @blogs.each do |blog| %>
+    <%= render blog %>
+    You have <strong><%= blog.comments.length %></strong> <%= blog.comments.length > 1 ? "comments" : "comment" %>.
+    <hr />
+  <% end %>
+</div>
+
+<%= link_to "New blog", new_blog_path %>
