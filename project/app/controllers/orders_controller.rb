@@ -18,6 +18,7 @@ class OrdersController < ApplicationController
 
   # GET /orders/1/edit
   def edit
+    (authenticate_user "Customer") && (assert_current_user @order.user_id)
   end
 
   # PATCH/PUT /orders/1 or /orders/1.json
